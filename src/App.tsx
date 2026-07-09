@@ -1,10 +1,5 @@
-function App() {
-  return (
-    <>
-      <h1>J&G TOUR</h1>
-      <p>Bienvenido al proyecto.</p>
-    </>
-  );
-}
+import AppRouter from './routes/AppRouter';
 
-export default App;
+export default function App() {
+  return <AppRouter />;
+}
