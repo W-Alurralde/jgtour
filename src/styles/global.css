@@ -6,6 +6,13 @@
   box-sizing: border-box;
 }
 
+:root {
+  --color-primary: #005f73;
+  --color-accent: #ee9b00;
+  --color-bg: #f8f9fa;
+  --color-text: #212529;
+}
+
 body {
   font-family: 'Inter', system-ui, sans-serif;
   background: #f8f9fa; /* fondo claro */
