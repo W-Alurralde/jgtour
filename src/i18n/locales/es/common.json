@@ -1,3 +1,13 @@
 {
-  "welcome": "Bienvenido al proyecto"
+  "welcome": "Bienvenido al proyecto",
+
+  "nav": {
+    "home": "Inicio",
+    "adventure": "Aventura",
+    "nature": "Naturaleza",
+    "family": "Familia",
+    "business": "Negocios",
+    "premium": "Premium",
+    "contact": "Contacto"
+  }
 }

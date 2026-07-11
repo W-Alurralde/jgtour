@@ -1,9 +1,12 @@
 import { Outlet } from 'react-router-dom';
+import Navbar from '../common/Navbar';
 
 export default function MainLayout() {
   return (
     <>
-      <header>J&G Tour</header>
+      <header >J&G Tour</header>
+      <Navbar />
+
       <main>
         <Outlet />
       </main>
