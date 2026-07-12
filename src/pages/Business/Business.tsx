@@ -1,3 +1,3 @@
 export default function Business() {
-  return <h1>Bienvenido a J&G Tour</h1>;
+  return <h1>Bienvenido a J&G Travel</h1>;
 }
