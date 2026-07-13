@@ -14,8 +14,9 @@ Construir la base del proyecto JGTravel.
 - TypeScript
 - React Router
 - i18next
-- GitHub
+- Git + GitHub
 - Rebranding JGTour → JGTravel
+- Estructura base del proyecto
 
 ## Resultado
 
