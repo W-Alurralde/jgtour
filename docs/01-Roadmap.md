@@ -8,22 +8,25 @@ Desarrollar una plataforma web de turismo moderna, escalable y multilenguaje par
 
 ## Sprint 1 – Base del Proyecto ✅
 
-- React + Vite + TypeScript
-- React Router
-- Internacionalización (i18next)
-- Git + GitHub
-- Rebranding JGTour → JGTravel
+✔ React + Vite + TypeScript
+✔ React Router
+✔ Internacionalización (i18next)
+✔ Git + GitHub
+✔ Rebranding JGTour → JGTravel
 
 ---
 
 ## Sprint 2 – Arquitectura 🚧
 
-- Arquitectura del proyecto
-- Design System
-- Documentación técnica
-- ADR
-- Refactor de estructura
-- Configuración base
+✔ Nueva estructura de carpetas
+✔ Organización de documentación
+✔ Project Charter
+
+□ Software Architecture
+□ Design System
+□ Coding Standards
+□ ADR
+□ Configuración Base
 
 ---
 

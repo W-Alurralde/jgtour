@@ -14,13 +14,13 @@ Diseñar la arquitectura técnica completa del proyecto antes de comenzar las in
 
 - [x] Nueva estructura de carpetas
 - [x] Creación carpeta docs
-- [x] Organización documentación
+- [x] Organización inicial documentación
+- [x] Refactor Project Charter
+- [ ] Software Architecture
 - [ ] Design System
 - [ ] Coding Standards
-- [ ] ADR
+- [ ] ADR-001
 - [ ] Configuración base
-- [ ] Variables de entorno
-- [ ] Arquitectura definitiva
 
 ---
 

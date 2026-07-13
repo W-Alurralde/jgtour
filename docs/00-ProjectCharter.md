@@ -4,49 +4,45 @@
 
 ## ****Objetivo****
 
-__Establecer la estructura organizacional, funciones específicas y líneas de autoridad de la empresa, consolidando nuestra trayectoria familiar en la Provincia de Salta como referentes en la gestión del turismo. El manual busca estandarizar la creación de experiencias innovadoras en turismo local, enoturismo, educativo y empresarial, integrando herramientas tecnológicas inmersivas para garantizar la excelencia operativa y la máxima satisfacción del cliente.__
+Diseñar y desarrollar JGTravel, una plataforma web moderna de turismo para Latinoamérica que centralice la búsqueda y gestión de vuelos, alojamientos, transporte, gastronomía y experiencias turísticas mediante la integración de APIs especializadas, ofreciendo una experiencia multilenguaje, responsive y escalable.
 
   
 
-## ****Alcance****
+## Alcance
 
-__Las disposiciones de este documento son de aplicación obligatoria para todo el personal de la organización, abarcando los niveles directivos, administrativos y operativos. Su cumplimiento guía el diseño, comercialización y ejecución de todas nuestras líneas de negocio (enoturismo, turismo corporativo, programas educativos y turismo local), así como la implementación y gestión de las herramientas tecnológicas aplicadas a la experiencia del viajero.__
+El presente documento define el alcance funcional y técnico del proyecto JGTravel durante el desarrollo del Producto Mínimo Viable (MVP).
 
-  
+Incluye:
 
-## Tecnologías principales
+• Plataforma Web
+• Autenticación
+• APIs de turismo
+• Sistema de reservas
+• Internacionalización
+• Dashboard administrativo
+• Simulación ERP mediante Dolibarr
 
-### ****El Mercado Tecnológico Actual en el Sector Turismo****
+# Resumen Ejecutivo – JGTravel
 
--   ****Velocidad de carga es conversión:**** Un retraso de un segundo en la carga web puede reducir las conversiones hoteleras y de reservas hasta en un 20%. Las páginas pesadas ya no son una opción.
--   ****Mobile-First y Reactividad:**** Los viajeros reservan cada vez más desde dispositivos móviles mientras están en viaje, exigiendo interfaces fluidas que se sientan como una app nativa.
--   ****Centralización de Datos (APIs):**** Las plataformas modernas ya no guardan toda la información en servidores propios; actúan como "agregadores inteligentes" que consumen datos en tiempo real (vuelos, clima, mapas) y los muestran de forma unificada.
+## ¿Qué es JGTravel?
 
-### ****Justificación Técnica de las Elecciones del Roadmap****
+JGTravel es una plataforma web de turismo orientada al mercado latinoamericano que centraliza la planificación, búsqueda y gestión integral de viajes en un único entorno digital. Su objetivo es ofrecer a los usuarios una experiencia moderna, intuitiva y multilenguaje, permitiéndoles acceder desde una sola aplicación a información y servicios relacionados con vuelos, alojamientos, transporte, gastronomía, experiencias turísticas y otros recursos necesarios para organizar un viaje.
 
--   ****⚛️ Frontend**** ****React + Vite + TypeScript (Sprint 1)****
+La plataforma está concebida bajo una arquitectura web escalable y responsive, integrando APIs especializadas del sector turístico para proporcionar información actualizada en tiempo real y facilitar el proceso de reserva y planificación de itinerarios. Inicialmente se desarrolla como un Producto Mínimo Viable (MVP), con capacidad de crecimiento hacia nuevas funcionalidades y mercados.
 
-****Vite:**** Reemplazó por completo a los viejos entornos como Create React App. Su servidor de desarrollo basado en módulos ESM nativos ofrece una velocidad de compilación casi instantánea. Para JGTravel, esto se traduce en tiempos de despliegue mínimos en producción y un rendimiento óptimo de cara al usuario.
+## Problema
 
-****TypeScript:**** En una plataforma que manejará pasarelas de pago (Mercado Pago), reservas de vuelos (Amadeus) y estructuras de datos complejas de hoteles, el tipado estático de TypeScript evita errores en producción. Garantiza que un dato de tipo Precio o ID\_Reserva nunca se rompa ni se confunda en el código.
+La planificación de viajes en Latinoamérica suele requerir consultar múltiples plataformas independientes para reservar vuelos, hoteles, transporte terrestre, actividades turísticas, restaurantes y obtener información complementaria como mapas o condiciones climáticas. Esta fragmentación obliga a los viajeros a utilizar diferentes aplicaciones, comparar información manualmente y repetir procesos de búsqueda y reserva, generando pérdida de tiempo, mayor complejidad y una experiencia poco integrada.
 
-****React + React Router:**** Sigue siendo el estándar de la industria para crear Single Page Applications (SPA). Permite que el usuario navegue entre la búsqueda de hoteles, el clima y los mapas sin que la página tenga que recargarse por completo, emulando una experiencia inmersiva.
+Además, muchos destinos turísticos regionales carecen de plataformas digitales que unifiquen la oferta de servicios locales y ofrezcan soporte multilenguaje para visitantes internacionales, limitando su visibilidad y competitividad.
 
--   ****🌐 Internacionalización: i18next (Sprint 1)****
+## Solución
 
-****i18next:**** Es la librería líder del mercado para React. Se eligió porque maneja la carga perezosa (lazy loading) de las traducciones. Esto significa que si un usuario entra en Español (ES), el navegador no gastará datos en cargar los archivos de Inglés (EN) o Portugués (PT) hasta que sea necesario, manteniendo la aplicación ligera.
+JGTravel propone una solución integral que concentra los principales servicios turísticos dentro de una única plataforma web. Mediante la integración de APIs especializadas, la aplicación permitirá consultar disponibilidad de vuelos, alojamientos, transporte, gastronomía y experiencias turísticas desde una interfaz unificada, optimizando la planificación del viaje y mejorando la experiencia del usuario.
 
--   ****🔥 Backend y Gestión: Firebase (Sprint 3)****
+El sistema incorpora autenticación de usuarios, gestión de reservas, panel administrativo, internacionalización en español, inglés y portugués, diseño responsive y una arquitectura preparada para futuras integraciones con sistemas ERP y nuevos proveedores turísticos. De esta manera, JGTravel busca convertirse en una plataforma tecnológica escalable que facilite la transformación digital del turismo regional y contribuya a conectar viajeros con la oferta turística de Latinoamérica de forma eficiente, accesible y centralizada.
 
-****Firebase Authentication:**** Desarrollar un sistema de usuarios seguro desde cero requiere meses de trabajo y auditorías. Se eligió Firebase porque resuelve el Login con Google y la gestión de sesiones en cuestión de horas con estándares bancarios de seguridad, permitiendo al equipo concentrarse en la lógica del negocio turístico.
 
--   ****🗺️ Mapas y Entorno: OpenStreetMap + Leaflet (Sprint 4)****
-
-****Leaflet:**** A diferencia de la API de Google Maps tradicional, que puede volverse extremadamente costosa al escalar en volumen de usuarios, la combinación de OpenStreetMap y Leaflet es de código abierto, altamente personalizable y gratuita. Esto permite renderizar mapas de Salta y Latinoamérica de forma interactiva y fluida sin comprometer el presupuesto del proyecto.
-
--   ****💳 Simulación e Integración: Dolibarr + Mercado Pago (Sprint 5)****
-
-****Dolibarr:**** Al ser una empresa de gran trayectoria familiar, integrar un ERP de código abierto como Dolibarr permite simular y conectar la gestión del negocio real (facturación, stock de servicios, clientes) con la plataforma web de manera directa.Mercado Pago Sandbox: Es el estándar absoluto de pagos en Latinoamérica. Su entorno de pruebas (Sandbox) permite validar todo el flujo de cobros de reservas de forma segura antes de pasar a producción.
 
 ## Público objetivo
 
@@ -101,99 +97,8 @@ La plataforma está diseñada desde su núcleo (__core__) con arquitectura ****i
 -   ****Enfoque de Mercado:**** El mercado brasileño, principal emisor de turistas internacionales de alta gama y enoturismo hacia el norte argentino y el resto del continente latinoamericano.
 -   ****Aplicación:**** Localización adaptada al portugués de Brasil, optimizando el motor de reservas, mapas interactivos y experiencias inmersivas para captar de forma directa este flujo turístico estratégico de alta conversión.
 
-🛠️ Estrategia de Implementación Técnica (i18next)
 
-Para garantizar un rendimiento óptimo y no penalizar la velocidad de carga de la web en dispositivos móviles (clave para el viajero en ruta) \[Roadmap\], el soporte de estos idiomas se implementa bajo las siguientes reglas técnicas en el ****Sprint 1****:
 
-1.  ****Lazy Loading (Carga Perezosa):**** Los archivos de traducción (`JSON`) se dividen por namespaces (ej. `common.json`, `auth.json`, `booking.json`). Solo se descarga en el navegador el idioma seleccionado por el usuario.
-2.  ****Detección Automática de Idioma:**** La plataforma utiliza plugins de i18next para detectar el idioma del navegador del usuario o las cookies de su última sesión, adaptando la experiencia al instante.
-3.  ****Soporte de Monedas Localizadas:**** La internacionalización trabaja en conjunto con la simulación de negocio para mostrar formatos numéricos, de fecha y símbolos de moneda adecuados a cada región.
-
-## 4\. APIS PREVISTAS (INTEGRACIÓN DEL ECOSISTEMA)
-
-Para consolidar a ****JGTravel**** como una plataforma transaccional e inmersiva \[Roadmap\], el backend y frontend se conectarán con servicios globales líderes en el sector __TravelTech__ \[Roadmap\]. Todas estas integraciones se concentran y unifican durante el ****Sprint 4**** \[Roadmap\]:
-
-### ✈️ 1. Amadeus API
-
--   ****Propósito Técnico:**** Conector principal con el GDS (Sistema de Distribución Global).
--   ****Funcionalidad en la Plataforma:**** Permite la búsqueda, comparación de tarifas, consulta de disponibilidad en tiempo real y la simulación de reserva de ****vuelos y hoteles**** a lo largo de toda Latinoamérica \[Roadmap\]. Es el motor que impulsa la escalabilidad internacional del proyecto \[Roadmap\].
-
-### 🗺️ 2. OpenStreetMap + Leaflet (API de Mapas)
-
--   ****Propósito Técnico:**** Motor de renderizado cartográfico de código abierto y cliente de mapas interactivo.
--   ****Funcionalidad en la Plataforma:**** Es la base de nuestras ****herramientas inmersivas****. Permitirá al usuario visualizar geolocalizadamente las rutas del vino en Salta, la ubicación exacta de hoteles, puntos de encuentro para turismo educativo y trazas de transporte \[Roadmap\]. Se prefiere sobre soluciones pagas por su rendimiento, nulo costo de escalabilidad y flexibilidad de personalización visual.
-
-### ☀️ 3. OpenWeather API
-
--   ****Propósito Técnico:**** Servicio meteorológico global en tiempo real y predictivo.
--   ****Funcionalidad en la Plataforma:**** Crucial para la planificación de experiencias al aire libre (enoturismo en los valles, excursiones locales y viajes educativos) \[Roadmap\]. Muestra al usuario las condiciones climáticas actuales de su destino y alertas meteorológicas antes de confirmar una reserva.
-
-### 📍 4. Foursquare / Google Places API
-
--   ****Propósito Técnico:**** Proveedor de datos de geolocalización de puntos de interés (POI).
--   ****Funcionalidad en la Plataforma:**** Alimenta la sección de ****gastronomía, experiencias turísticas y comercios locales**** \[Roadmap\]. Extrae de forma dinámica información crítica como nombres de restaurantes, reseñas, fotografías, horarios de apertura y direcciones para enriquecer las guías de viaje autogestionadas.
-
-### 📸 5. Pexels API
-
--   ****Propósito Técnico:**** Repositorio dinámico de imágenes y video de stock de alta calidad.
--   ****Funcionalidad en la Plataforma:**** Automatiza el contenido visual de la aplicación. Cuando un usuario busque un destino o experiencia que no cuente con material propio cargado en el ERP (Dolibarr), la plataforma consumirá imágenes en alta resolución de forma dinámica para mantener una interfaz atractiva, inmersiva y moderna sin sobrecargar el almacenamiento del servidor \[Roadmap\].
-
-## 5\. ARQUITECTURA DE LA PLATAFORMA
-
-Para soportar la escala del Roadmap de ****JGTravel**** (multilenguaje, múltiples APIs y simulación de negocio), se implementará una arquitectura basada en el patrón ****Feature-Driven Development (FDD) / Feature-Sliced Design**** \[Roadmap\]. Este enfoque permite desacoplar los módulos del negocio (como vuelos, enoturismo o pasarela de pagos) para que el proyecto sea mantenible en el tiempo \[Roadmap\].
-
-🗺️ 5.1 Patrón de Diseño Frontend: Feature-Driven
-
-En lugar de agrupar todo por tipos de archivos técnicos (todos los componentes juntos, todos los hooks juntos), el código se organiza por ****módulos de negocio (Features)****. Cada funcionalidad compleja es autosuficiente.
-
--   ****Ventaja:**** Si necesitamos modificar o auditar la integración de __Mercado Pago__ o el mapa de __Leaflet__, todo su código relacionado (componentes visuales, lógica, tipos e interfaces) se encuentra concentrado en una sola carpeta \[Roadmap\].
-
-📂 5.2 Estructura de Carpetas Propuesta (Sprint 2)
-
-A continuación, se detalla el árbol de directorios que configuraremos en la raíz del proyecto (`/src`) durante el refactor de la estructura \[Roadmap\]:
-
-src/
-
-├── assets/ # Recursos estáticos globales (imágenes, logos de JGTravel)
-
-├── components/ # Componentes UI globales y atómicos (Botones, Inputs del Design System)
-
-├── config/ # Configuraciones globales (firebase.ts, i18n.ts, apiClients.ts)
-
-├── context/ # Contextos globales de React (AuthContext, ThemeContext)
-
-├── features/ # MÓDULOS DE NEGOCIO (Núcleo de la arquitectura)
-
-│ ├── auth/ # Login, Registro, Firebase Auth Hooks \[Sprint 3\]
-
-│ ├── flights-hotels/ # Integración con Amadeus API \[Sprint 4\]
-
-│ ├── maps/ # Mapas interactivos, Leaflet, capas de Salta \[Sprint 4\]
-
-│ ├── experiences/ # Enoturismo, Educativo, Empresarial, API Pexels/Places \[Sprint 4\]
-
-│ └── checkout/ # Reservas, Carrito, Integración Mercado Pago Sandbox \[Sprint 5\]
-
-├── hooks/ # Custom Hooks reutilizables a nivel global (useFetch, useWindowSize)
-
-├── routes/ # Configuración y definición de rutas con React Router
-
-├── types/ # Interfaces y Tipos de TypeScript globales e inmutables
-
-├── utils/ # Funciones utilitarias (formateadores de fechas, monedas, validadores)
-
-├── App.tsx # Componente raíz de la aplicación
-
-└── main.tsx # Punto de entrada de Vite para el renderizado en el DOM
-
-⚙️ 5.3 Pilares Técnicos de la Arquitectura
-
-1.  ****Desacoplamiento de APIs (Capas de Servicio):**** Las llamadas a las APIs externas (Amadeus, OpenWeather, etc.) no se harán directamente dentro de los componentes visuales \[Roadmap\]. Se crearán __servicios__ aislados dentro de cada `feature` para mapear y limpiar las respuestas antes de que lleguen a la interfaz.
-2.  ****Estado Predictivo y Contextual:**** El estado de la autenticación de usuarios (Firebase) se manejará mediante un `Context` global de React, asegurando que cualquier pantalla sepa si el usuario es un cliente corporativo, educativo o turista local \[Roadmap\].
-3.  ****Tipado Estricto de Datos:**** Cada entidad del negocio (ej: `Vuelo`, `Reserva`, `Bodega`, `Usuario`) tendrá un tipo de TypeScript inmutable definido. Esto garantiza que las simulaciones con el ERP Dolibarr y los esquemas de Mercado Pago no rompan el flujo de datos \[Roadmap\].
-4.  ****Enrutamiento Dinámico:**** Controlado por __React Router__, implementando la división de código (__Code Splitting__) a través de `React.lazy`. Las vistas pesadas (como la pantalla de mapas interactivos del Sprint 4) solo se cargarán cuando el usuario navegue hacia ellas \[Roadmap\], optimizando el rendimiento de carga inicial.
-
-  
 
 ## Equipo
 
@@ -204,4 +109,29 @@ Arquitectura de Software
 Diseño y planificación técnica asistida mediante herramientas de inteligencia artificial.
 
 Control de versiones
-Git + GitHub
+Git + GitHu
+
+
+## ESTADO ACTUAL
+
+Sprint 2
+
+Estado
+
+En desarrollo
+
+Arquitectura
+
+80%
+
+Frontend
+
+35%
+
+Backend
+
+0%
+
+Integraciones
+
+0%
