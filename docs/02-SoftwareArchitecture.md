@@ -223,3 +223,23 @@ La plataforma centraliza e intercambia los siguientes dominios modulares con pro
 | **Imágenes** | Pexels / Unsplash |
 | **Módulos de Core** | Usuarios, Perfil, Destinos, Experiencias, Paquetes, Reservas, Favoritos, Notificaciones, Backoffice y Administración. |
 
+
+# Arquitectura General
+
+![Arquitectura](./diagrams/architecture-v1.png)
+
+Descripción... ¿Por qué este diagrama es tan importante?
+
+Porque define una regla que vamos a respetar durante todo el proyecto:
+
+React nunca hablará directamente con un proveedor externo.
+
+Siempre existirá una capa intermedia.
+
+Eso nos da:
+
+seguridad,
+independencia,
+posibilidad de cambiar proveedores,
+pruebas más simples,
+mantenimiento más sencillo.
