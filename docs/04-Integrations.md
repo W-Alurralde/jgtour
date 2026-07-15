@@ -1,3 +1,46 @@
+## Organizacion de Integraciones 
+
+04-Integrations.md
+
+1. Transporte
+   - Amadeus
+   - Busbud
+   - CarTrawler
+
+2. Hospedaje
+   - Amadeus
+   - HotelBeds (futuro)
+
+3. Gastronomía
+   - Google Places
+   - Foursquare
+
+4. Clima
+   - OpenWeather
+
+5. Mapas
+   - OpenStreetMap
+   - Leaflet
+
+6. Pagos
+   - Mercado Pago
+
+7. Autenticación
+   - Firebase
+
+8. Imágenes
+   - Pexels
+   - Unsplash
+
+9. Seguros
+   - Cover Genius
+   - Allianz Partners
+   - AXA Partners
+
+10. Backoffice
+   - Dolibarr
+
+
 
 ## 4\. APIS PREVISTAS (INTEGRACIÓN DEL ECOSISTEMA)
 
