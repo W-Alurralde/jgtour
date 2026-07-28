@@ -3,6 +3,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
 
 import { queryClient } from "../config/queryClient";
+import { AuthProvider } from "../contexts/AuthContext";
 
 interface AppProvidersProps {
   children: ReactNode;
@@ -11,12 +12,14 @@ interface AppProvidersProps {
 export function AppProviders({ children }: AppProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
+      <AuthProvider>
+        {children}
 
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-      />
+        <Toaster
+          position="top-right"
+          reverseOrder={false}
+        />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
