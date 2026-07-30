@@ -9,42 +9,25 @@ Construir la infraestructura base del proyecto para que cualquier funcionalidad 
 - [x] JGT-013 Configurar .env
 - [x] JGT-014 Configurar Firebase
 - [x] JGT-015 Providers	- AuthContext
-- [ ] JGT-016 React Query	
-- [ ] JGT-017 Login Google
-- [ ] Configuración base
-- [ ] Design System
-- [ ] Coding Standards
+- [x] JGT-016 React Query - Funcional	
+- [X] JGT-017 Login Google
 
-TASK-004
-Configuración del proyecto
-.env
-Config
-Services
-Axios
-Variables
-TASK-005
-Firebase
-Login Google
-Logout
-AuthContext
-Protected Routes
-TASK-006
-Design System
-Colores
-Tipografía
-Grid
-Botones
-Inputs
-Cards
-TASK-007
-Home
 
-Landing profesional.
+## Entregables
+* Variables de entorno tipadas
+* Configuración centralizada (config/)
+* Firebase Authentication integrado
+* Login Google operativo
+* Context API para autenticación
+* React Query configurado globalmente
+* Hook useAuth() reutilizable
+* Hook useWeather() de ejemplo
+* Integración de sesión en Navbar
 
-TASK-008
-Navbar
+## Estado
+🟢 Finalizado
+## Resultado
 
-Responsive.
+La plataforma quedó con autenticación Google real mediante Firebase Authentication, gestión global de sesión con Context API y soporte de cache y consultas asíncronas mediante TanStack React Query.
 
-TASK-009
-Footer
+La arquitectura base quedó preparada para integrar APIs turísticas externas y funcionalidades de negocio en los siguientes sprints.
