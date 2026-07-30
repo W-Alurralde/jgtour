@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 
 import { queryClient } from "../config/queryClient";
 import { AuthProvider } from "../contexts/AuthContext";
+import { WeatherProvider } from "../contexts/WeatherContext";
 
 interface AppProvidersProps {
   children: ReactNode;
@@ -13,12 +14,10 @@ export function AppProviders({ children }: AppProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        {children}
-
-        <Toaster
-          position="top-right"
-          reverseOrder={false}
-        />
+        <WeatherProvider>
+          {children}
+          <Toaster position="top-right" reverseOrder={false} />
+        </WeatherProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

@@ -16,7 +16,7 @@ Comenzar las integraciones reales del ecosistema turístico de JGTravel y consol
 
 ### Integraciones externas
 
-* [ ] JGT-018 – Integrar OpenWeather API real
+* [x] JGT-018 – Integrar OpenWeather API real
 * [ ] JGT-019 – Integrar OpenStreetMap + Leaflet
 * [ ] JGT-020 – Implementar API Gateway base (`apiClient`)
 * [ ] JGT-021 – Configurar Amadeus Sandbox
