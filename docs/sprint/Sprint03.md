@@ -8,7 +8,7 @@ Construir la infraestructura base del proyecto para que cualquier funcionalidad 
 - [x] JGT-012 – Instalación del stack base
 - [x] JGT-013 Configurar .env
 - [x] JGT-014 Configurar Firebase
-- [x] JGT-015 Providers	
+- [x] JGT-015 Providers	- AuthContext
 - [ ] JGT-016 React Query	
 - [ ] JGT-017 Login Google
 - [ ] Configuración base
