@@ -19,22 +19,40 @@ Comenzar las integraciones reales del ecosistema turístico de JGTravel y consol
 * [x] JGT-018 – Integrar OpenWeather API real
 * [x] JGT-019 – Integrar OpenStreetMap + Leaflet
 * [x] JGT-020 – Implementar API Gateway base (`apiClient`)
-* [ ] JGT-021 – Configurar Amadeus Sandbox
-* [ ] JGT-022 – Crear servicios desacoplados para vuelos y hoteles
+* [ ] JGT-021 – Configurar Amadeus Sandbox (**pendiente; reemplazado temporalmente por TravelPayouts para el MVP**)
+* [x] JGT-022 – Crear servicios desacoplados para vuelos y hoteles
+
+### Módulo de vuelos (MVP)
+
+* [x] JGT-023 – Crear módulo `features/flights`
+* [x] JGT-024 – Implementar `FlightSearchForm`
+* [x] JGT-025 – Integrar React Hook Form + Zod en vuelos
+* [x] JGT-026 – Crear `useFlightSearch` con React Query
+* [x] JGT-027 – Renderizar `FlightResults` y `FlightCard`
+* [x] JGT-028 – Integrar enlaces reales de TravelPayouts para vuelos
+
+### Módulo de hoteles (MVP)
+
+* [x] JGT-029 – Crear módulo `features/hotels`
+* [x] JGT-030 – Implementar `HotelSearchForm`
+* [x] JGT-031 – Integrar React Hook Form + Zod en hoteles
+* [x] JGT-032 – Crear `useHotelSearch` con React Query
+* [x] JGT-033 – Renderizar `HotelResults` y `HotelCard`
+* [x] JGT-034 – Integrar enlaces de hoteles (TravelPayouts MVP)
 
 ### Arquitectura y calidad
 
-* [ ] JGT-023 – Completar configuración base del proyecto
-* [ ] JGT-024 – Finalizar Design System visual
-* [ ] JGT-025 – Definir Coding Standards del proyecto
-* [ ] JGT-026 – Configurar aliases TypeScript (`@/`)
-* [ ] JGT-027 – Configurar ESLint + reglas de arquitectura
+* [ ] JGT-035 – Completar configuración base del proyecto
+* [ ] JGT-036 – Finalizar Design System visual
+* [ ] JGT-037 – Definir Coding Standards del proyecto
+* [ ] JGT-038 – Configurar aliases TypeScript (`@/`)
+* [ ] JGT-039 – Configurar ESLint + reglas de arquitectura
 
 ### UX y componentes
 
-* [ ] JGT-028 – Mejorar Navbar responsive
-* [ ] JGT-029 – Crear layout base de páginas
-* [ ] JGT-030 – Crear componentes UI reutilizables (Button, Card, Badge)
+* [ ] JGT-040 – Mejorar Navbar responsive
+* [ ] JGT-041 – Crear layout base de páginas
+* [ ] JGT-042 – Crear componentes UI reutilizables (`Button`, `Card`, `Badge`)
 
 ---
 
@@ -43,10 +61,12 @@ Comenzar las integraciones reales del ecosistema turístico de JGTravel y consol
 * Consumo real de OpenWeather
 * Mapa interactivo con Leaflet
 * API client centralizado
-* Integración Amadeus Sandbox inicial
-* Design System operativo
-* Coding Standards documentados
-* Componentes UI reutilizables
+* Integración inicial TravelPayouts (MVP)
+* Módulo de búsqueda de vuelos funcional
+* Módulo de búsqueda de hoteles funcional
+* Formularios validados con Zod
+* React Query integrado en búsquedas
+* Arquitectura desacoplada `features + services + hooks`
 * Base responsive para desktop y mobile
 
 ---
@@ -62,4 +82,4 @@ Comenzar las integraciones reales del ecosistema turístico de JGTravel y consol
 
 ## Observaciones
 
-Este sprint marca el inicio de las integraciones de negocio reales de JGTravel. El foco principal deja de ser la infraestructura y pasa a ser el consumo de APIs turísticas externas, la experiencia visual de usuario y la consolidación de estándares técnicos para soportar futuras funcionalidades como reservas, pagos, favoritos y backoffice.
+El acceso al sandbox de Amadeus quedó bloqueado por cambios en el portal Enterprise de Amadeus Developers. Para no detener el desarrollo del MVP se adoptó **TravelPayouts** como proveedor temporal de enlaces comerciales para vuelos y hoteles, manteniendo la arquitectura desacoplada para permitir el reemplazo futuro por Amadeus, Hotelbeds u otros mayoristas turísticos sin modificar la interfaz de usuario.
