@@ -18,6 +18,16 @@ export const ENV = {
   FIREBASE_MESSAGING_SENDER_ID: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
   FIREBASE_APP_ID: import.meta.env.VITE_FIREBASE_APP_ID,
 };
+export const env = {
+  amadeus: {
+    apiKey: import.meta.env.VITE_AMADEUS_API_KEY,
+    apiSecret: import.meta.env.VITE_AMADEUS_API_SECRET,
+  },
+
+  travelpayouts: {
+    apiToken: import.meta.env.VITE_TRAVELPAYOUTS_API_TOKEN,
+  },
+};
 
 export function getFirebaseEnv() {
   return {
