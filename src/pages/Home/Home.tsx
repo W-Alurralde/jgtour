@@ -1,30 +1,20 @@
-import DestinationMap from "../../features/maps/components/DestinationMap";
-import { buildFlightSearchLink } from "../../services/travelpayouts/flights";
+import DestinationMap from "@/features/maps/components/DestinationMap";
+import FlightSearchForm from "@/features/flights/components/FlightSearchForm";
+import HotelSearchForm from "@/features/hotels/components/HotelSearchForm";
 
 export default function Home() {
-  const flightLink = buildFlightSearchLink({
-    origin: "SLA",
-    destination: "AEP",
-    departureDate: "2026-08-05",
-  });
-
   return (
-    <section>
+    <section style={{ display: "grid", gap: 32 }}>
       <h1>Bienvenido a JGTravel</h1>
 
-      <p>
-        <a
-          href={flightLink}
-          target="_blank"
-          rel="noreferrer"
-        >
-          ✈️ Buscar vuelos Salta → Buenos Aires
-        </a>
-      </p>
+      <FlightSearchForm />
 
-      <h2>Destinos destacados de Salta</h2>
+      <HotelSearchForm />
 
-      <DestinationMap />
+      <section>
+        <h2>Destinos destacados de Salta</h2>
+        <DestinationMap />
+      </section>
     </section>
   );
 }

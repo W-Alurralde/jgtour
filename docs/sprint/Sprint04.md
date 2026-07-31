@@ -45,7 +45,7 @@ Comenzar las integraciones reales del ecosistema turístico de JGTravel y consol
 * [ ] JGT-035 – Completar configuración base del proyecto
 * [ ] JGT-036 – Finalizar Design System visual
 * [ ] JGT-037 – Definir Coding Standards del proyecto
-* [ ] JGT-038 – Configurar aliases TypeScript (`@/`)
+* [x] JGT-038 – Configurar aliases TypeScript (`@/`)
 * [ ] JGT-039 – Configurar ESLint + reglas de arquitectura
 
 ### UX y componentes
