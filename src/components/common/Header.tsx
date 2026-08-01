@@ -2,7 +2,7 @@ export default function Header() {
   return (
     <header>
       <div>
-        <img src="public/logo.png" alt="J&G Tour" height={48} />
+        <img src="/logo.png" alt="J&G Tour" height={48} />
       </div>
 
       <div>
