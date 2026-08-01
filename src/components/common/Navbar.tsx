@@ -1,59 +1,113 @@
-import { useAuth } from "../../hooks/useAuth";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
+import Button from "@/components/ui/Button";
+import { useAuth } from "@/hooks/useAuth";
+
+import "./Navbar.css";
+
 export default function Navbar() {
+  const [open, setOpen] = useState(false);
+
   const { user, loginWithGoogle, logout } = useAuth();
   const { t } = useTranslation();
 
+  const closeMenu = () => setOpen(false);
+
   return (
-    <nav>
-      <Link to="/home">{t("nav.home")}</Link>
-      {" | "}
-      <Link to="/adventure">{t("nav.adventure")}</Link>
-      {" | "}
-      <Link to="/nature">{t("nav.nature")}</Link>
-      {" | "}
-      <Link to="/family">{t("nav.family")}</Link>
-      {" | "}
-      <Link to="/business">{t("nav.business")}</Link>
-      {" | "}
-      <Link to="/premium">{t("nav.premium")}</Link>
-      {" | "}
-      <Link to="/contact">{t("nav.contact")}</Link>
+    <header className="navbar">
+      <div className="navbar-container">
+        <Link to="/" className="navbar-brand" onClick={closeMenu}>
+          JGTravel
+        </Link>
 
-      {" | "}
-
-      {user ? (
-        <span>
-          {user.photoURL && (
-            <img
-              src={user.photoURL}
-              alt={user.displayName ?? "Usuario"}
-              width={28}
-              height={28}
-              style={{
-                borderRadius: "50%",
-                verticalAlign: "middle",
-                marginRight: "8px",
-              }}
-            />
-          )}
-
-          {user.displayName}
-
-          <button
-            onClick={logout}
-            style={{ marginLeft: "8px" }}
-          >
-            Salir
-          </button>
-        </span>
-      ) : (
-        <button onClick={loginWithGoogle}>
-          Iniciar sesión
+        <button
+          className="navbar-toggle"
+          onClick={() => setOpen(!open)}
+          aria-label="Abrir menú"
+        >
+          ☰
         </button>
-      )}
-    </nav>
+
+        <nav className={`navbar-menu ${open ? "open" : ""}`}>
+          <Link to="/" className="navbar-link" onClick={closeMenu}>
+            {t("nav.home")}
+          </Link>
+
+          <Link
+            to="/adventure"
+            className="navbar-link"
+            onClick={closeMenu}
+          >
+            {t("nav.adventure")}
+          </Link>
+
+          <Link
+            to="/nature"
+            className="navbar-link"
+            onClick={closeMenu}
+          >
+            {t("nav.nature")}
+          </Link>
+
+          <Link
+            to="/family"
+            className="navbar-link"
+            onClick={closeMenu}
+          >
+            {t("nav.family")}
+          </Link>
+
+          <Link
+            to="/business"
+            className="navbar-link"
+            onClick={closeMenu}
+          >
+            {t("nav.business")}
+          </Link>
+
+          <Link
+            to="/premium"
+            className="navbar-link"
+            onClick={closeMenu}
+          >
+            {t("nav.premium")}
+          </Link>
+
+          <Link
+            to="/contact"
+            className="navbar-link"
+            onClick={closeMenu}
+          >
+            {t("nav.contact")}
+          </Link>
+        </nav>
+
+        <div className="navbar-actions">
+          {user ? (
+            <div className="navbar-user">
+              {user.photoURL && (
+                <img
+                  src={user.photoURL}
+                  alt={user.displayName ?? "Usuario"}
+                  className="navbar-avatar"
+                />
+              )}
+
+              <span>{user.displayName}</span>
+
+              <Button variant="outline" onClick={logout}>
+                Salir
+              </Button>
+            </div>
+          ) : (
+            <Button variant="primary" onClick={loginWithGoogle}>
+              Iniciar sesión
+            </Button>
+          )}
+        </div>
+      </div>
+    </header>
   );
 }

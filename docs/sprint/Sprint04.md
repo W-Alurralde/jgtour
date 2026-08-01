@@ -50,9 +50,9 @@ Comenzar las integraciones reales del ecosistema turístico de JGTravel y consol
 
 ### UX y componentes
 
-* [ ] JGT-040 – Mejorar Navbar responsive
-* [ ] JGT-041 – Crear layout base de páginas
-* [ ] JGT-042 – Crear componentes UI reutilizables (`Button`, `Card`, `Badge`)
+* [x] JGT-040 – Mejorar Navbar responsive
+* [x] JGT-041 – Crear layout base de páginas
+* [x] JGT-042 – Crear componentes UI reutilizables (`Button`, `Card`, `Badge`)
 
 ---
 
