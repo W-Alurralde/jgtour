@@ -18,10 +18,6 @@ export default function Navbar() {
   return (
     <header className="navbar">
       <div className="navbar-container">
-        <Link to="/" className="navbar-brand" onClick={closeMenu}>
-          JGTravel
-        </Link>
-
         <button
           className="navbar-toggle"
           onClick={() => setOpen(!open)}
@@ -29,57 +25,36 @@ export default function Navbar() {
         >
           ☰
         </button>
+        <Link to="/" className="navbar-brand" onClick={closeMenu}>
+          <img src="/logo-jgtravel.png" alt="JGTravel" style={{ height: 70 }} />
+        </Link>
 
         <nav className={`navbar-menu ${open ? "open" : ""}`}>
           <Link to="/" className="navbar-link" onClick={closeMenu}>
             {t("nav.home")}
           </Link>
 
-          <Link
-            to="/adventure"
-            className="navbar-link"
-            onClick={closeMenu}
-          >
+          <Link to="/adventure" className="navbar-link" onClick={closeMenu}>
             {t("nav.adventure")}
           </Link>
 
-          <Link
-            to="/nature"
-            className="navbar-link"
-            onClick={closeMenu}
-          >
+          <Link to="/nature" className="navbar-link" onClick={closeMenu}>
             {t("nav.nature")}
           </Link>
 
-          <Link
-            to="/family"
-            className="navbar-link"
-            onClick={closeMenu}
-          >
+          <Link to="/family" className="navbar-link" onClick={closeMenu}>
             {t("nav.family")}
           </Link>
 
-          <Link
-            to="/business"
-            className="navbar-link"
-            onClick={closeMenu}
-          >
+          <Link to="/business" className="navbar-link" onClick={closeMenu}>
             {t("nav.business")}
           </Link>
 
-          <Link
-            to="/premium"
-            className="navbar-link"
-            onClick={closeMenu}
-          >
+          <Link to="/premium" className="navbar-link" onClick={closeMenu}>
             {t("nav.premium")}
           </Link>
 
-          <Link
-            to="/contact"
-            className="navbar-link"
-            onClick={closeMenu}
-          >
+          <Link to="/contact" className="navbar-link" onClick={closeMenu}>
             {t("nav.contact")}
           </Link>
         </nav>

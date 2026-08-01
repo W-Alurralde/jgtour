@@ -71,8 +71,27 @@
 }
 
 @media (max-width: 768px) {
+  .navbar-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .navbar-brand {
+    font-size: 1.75rem;
+  }
+
   .navbar-toggle {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin: 0 auto;
+    font-size: 2rem;
+    border-radius: 8px;
   }
 
   .navbar-menu {
@@ -86,6 +105,7 @@
     align-items: flex-start;
     padding: 1rem;
     display: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   }
 
   .navbar-menu.open {
@@ -93,10 +113,16 @@
   }
 
   .navbar-actions {
-    margin-left: auto;
+    justify-self: end;
   }
 
   .navbar-user span {
     display: none;
+  }
+
+  .navbar-actions button {
+    padding: 10px 14px !important;
+    font-size: 0.875rem;
+    white-space: nowrap;
   }
 }
