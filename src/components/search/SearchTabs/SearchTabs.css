@@ -1,0 +1,64 @@
+.search-tabs {
+  display: grid;
+  gap: 1rem;
+}
+
+.tabs-scroll {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: none;
+}
+
+.tabs-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-btn {
+  min-width: 88px;
+  border: none;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  color: #64748b;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+  transition: all 0.2s ease;
+}
+
+.tab-btn i {
+  font-size: 1.1rem;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, #0057b8, #11c5e8);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 87, 184, 0.28);
+}
+
+.tab-panel {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+}
+
+@media (min-width: 992px) {
+  .tabs-scroll {
+    justify-content: center;
+    overflow: visible;
+  }
+
+  .tab-btn {
+    flex-direction: row;
+    min-width: auto;
+    padding: 0.9rem 1.25rem;
+  }
+}

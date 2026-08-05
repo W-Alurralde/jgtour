@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 
 import "./i18n/i18n";
 import "@/styles/theme.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import App from "./App";
 import { AppProviders } from "./providers/AppProviders";
 

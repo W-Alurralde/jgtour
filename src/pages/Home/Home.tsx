@@ -2,8 +2,8 @@ import Container from "@/components/ui/Container";
 import Badge from "@/components/ui/Badge";
 
 import DestinationMap from "@/features/maps/components/DestinationMap";
-import FlightSearchForm from "@/features/flights/components/FlightSearchForm";
-import HotelSearchForm from "@/features/hotels/components/HotelSearchForm";
+import SearchTabs from "@/components/search/SearchTabs/SearchTabs";
+
 
 export default function Home() {
   return (
@@ -14,9 +14,7 @@ export default function Home() {
           <Badge variant="success">MVP Online</Badge>
         </div>
 
-        <FlightSearchForm />
-
-        <HotelSearchForm />
+<SearchTabs />
 
         <section>
           <h2>Destinos destacados de Salta</h2>
