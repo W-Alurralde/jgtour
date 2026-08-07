@@ -2,7 +2,7 @@ import Container from "@/components/ui/Container";
 import Badge from "@/components/ui/Badge";
 
 import DestinationMap from "@/features/maps/components/DestinationMap";
-import SearchCategories from "@/components/search/SearchCategories/SearchCategories";
+import SearchBar from "@/components/search/SearchBar/SearchBar";
 
 export default function Home() {
   return (
@@ -55,16 +55,16 @@ export default function Home() {
           </div>
         </section>
 
-        {/* CATEGORÍAS */}
-        <SearchCategories />
+        {/* NUEVA BARRA PREMIUM */}
+        <SearchBar />
 
         {/* MAPA */}
         <section style={{ display: "grid", gap: 16 }}>
           <div style={{ display: "grid", gap: 6 }}>
             <h2 style={{ margin: 0 }}>Destinos destacados de Salta</h2>
             <p style={{ margin: 0, color: "#64748b" }}>
-              Explorá los puntos más emblemáticos de la provincia y planificá tu
-              próxima aventura desde JGTravel.
+              Explorá los puntos más emblemáticos de la provincia y planificá
+              tu próxima aventura desde JGTravel.
             </p>
           </div>
 

@@ -1,0 +1,120 @@
+.flight-search {
+  display: grid;
+  gap: 1rem;
+}
+
+.flight-trip-type {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.flight-trip-type button {
+  border: 1px solid #dbe4f0;
+  background: #ffffff;
+  color: #334155;
+  border-radius: 999px;
+  padding: 0.7rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.flight-trip-type button.active {
+  background: linear-gradient(135deg, #0057b8, #11c5e8);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+.flight-search-panel {
+  background: #ffffff;
+  border-radius: 32px;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+}
+
+.flight-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.flight-field label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.flight-field input,
+.flight-field select {
+  width: 100%;
+  border: 1px solid #dbe4f0;
+  border-radius: 16px;
+  padding: 0.9rem 1rem;
+  font-size: 0.95rem;
+  color: #334155;
+  background: #f8fafc;
+}
+
+.passengers-field {
+  grid-column: span 2;
+  background: #f8fafc;
+  border: 1px solid #dbe4f0;
+  border-radius: 20px;
+  padding: 1rem;
+}
+
+.passenger-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.counter button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: #e2e8f0;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.flight-submit {
+  grid-column: 1 / -1;
+  border: none;
+  border-radius: 999px;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #e11d48, #ff2d55);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.flight-placeholder {
+  padding: 1rem;
+  border-radius: 20px;
+  background: #f8fafc;
+  color: #475569;
+}
+
+@media (max-width: 992px) {
+  .flight-search-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .passengers-field {
+    grid-column: span 1;
+  }
+}
