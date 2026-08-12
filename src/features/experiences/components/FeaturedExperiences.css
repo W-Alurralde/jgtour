@@ -1,0 +1,56 @@
+.experiences-section {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.experiences-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.experience-card {
+  background: #fff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.experience-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.14);
+}
+
+.experience-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.experience-content {
+  padding: 1.25rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.experience-content span {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.experience-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.experience-footer button {
+  border: none;
+  border-radius: 999px;
+  padding: 0.6rem 1rem;
+  background: linear-gradient(135deg, #0057b8, #00b8d9);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}

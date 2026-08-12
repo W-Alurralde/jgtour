@@ -1,5 +1,6 @@
 import Container from "@/components/ui/Container";
 import Badge from "@/components/ui/Badge";
+import FeaturedExperiences from "@/features/experiences/components/FeaturedExperiences";
 
 import DestinationMap from "@/features/maps/components/DestinationMap";
 import SearchBar from "@/components/search/SearchBar/SearchBar";
@@ -57,6 +58,7 @@ export default function Home() {
 
         {/* NUEVA BARRA PREMIUM */}
         <SearchBar />
+        <FeaturedExperiences />
 
         {/* MAPA */}
         <section style={{ display: "grid", gap: 16 }}>

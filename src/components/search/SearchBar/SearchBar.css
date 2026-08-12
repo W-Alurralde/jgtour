@@ -1,10 +1,14 @@
 .search-bar {
   display: grid;
   gap: 1rem;
+  position: relative;
+  z-index: 500;
 }
 
 .search-panel {
   position: relative;
+  z-index: 600;
+
   background: #ffffff;
   border-radius: 999px;
   padding: 0.75rem;
@@ -91,12 +95,18 @@
   position: absolute;
   top: calc(100% + 12px);
   right: 0;
-  width: 340px;
+
+  width: 360px;
+  max-width: calc(100vw - 2rem);
+
   background: #ffffff;
   border-radius: 28px;
   padding: 1.5rem;
-  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.18);
-  z-index: 50;
+
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.22);
+
+  z-index: 99999;
+
   display: grid;
   gap: 1rem;
 }
@@ -218,4 +228,18 @@
 
 .category-icon {
   font-size: 1rem;
+}
+/* =========================
+   LEAFLET FIX
+   ========================= */
+
+.leaflet-container {
+  z-index: 1 !important;
+}
+
+.leaflet-pane,
+.leaflet-top,
+.leaflet-bottom,
+.leaflet-control {
+  z-index: 1 !important;
 }

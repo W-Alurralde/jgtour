@@ -1,21 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import { buildTravelPayoutsHotelLink } from "../services/travelPayoutsHotelService";
+import type { HotelSearchState } from "../types/hotelSearch.types";
 
-import { mockHotels } from "../data/mockHotels";
-import type { HotelSearchFormData } from "../schemas/hotelSearch.schema";
+export function useHotelSearch() {
+  const searchHotels = (search: HotelSearchState) => {
+    const url = buildTravelPayoutsHotelLink(search);
+    window.open(url, "_blank");
+  };
 
-export function useHotelSearch(params?: HotelSearchFormData) {
-  return useQuery({
-    queryKey: ["hotels", params],
-    queryFn: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      return mockHotels.filter(
-        (hotel) =>
-          !params ||
-          hotel.city.toLowerCase() === params.city.toLowerCase()
-      );
-    },
-    enabled: !!params,
-    staleTime: 1000 * 60 * 30,
-  });
+  return { searchHotels };
 }
