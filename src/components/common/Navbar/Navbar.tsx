@@ -13,6 +13,14 @@ export default function Navbar() {
 
   const { user, loginWithGoogle, logout } = useAuth();
 
+  const handleLogin = async () => {
+    try {
+      await loginWithGoogle();
+    } catch (error) {
+      console.error("Error al iniciar sesión con Google:", error);
+    }
+  };
+
   return (
     <>
       <header className="navbar">
@@ -59,7 +67,7 @@ export default function Navbar() {
                   </Button>
                 </>
               ) : (
-                <Button variant="primary" onClick={loginWithGoogle}>
+                <Button variant="primary" onClick={handleLogin}>
                   Iniciar sesión
                 </Button>
               )}

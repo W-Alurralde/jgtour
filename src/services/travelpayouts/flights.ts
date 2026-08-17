@@ -4,12 +4,14 @@ export interface FlightLinkParams {
   origin: string;
   destination: string;
   departureDate: string;
+  returnDate?: string;
 }
 
 export function buildFlightSearchLink({
   origin,
   destination,
   departureDate,
+  returnDate,
 }: FlightLinkParams) {
   const baseUrl = "https://www.travelpayouts.com/search";
 
@@ -19,8 +21,11 @@ export function buildFlightSearchLink({
   url.searchParams.set("destination", destination);
   url.searchParams.set("depart_date", departureDate);
 
-  // Tu token de afiliado
-  url.searchParams.set("marker", env.travelpayouts.apiToken);
+  if (returnDate) {
+    url.searchParams.set("return_date", returnDate);
+  }
+
+  url.searchParams.set("marker", env.travelpayouts.marker);
 
   return url.toString();
 }

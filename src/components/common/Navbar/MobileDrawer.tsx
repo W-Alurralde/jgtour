@@ -27,7 +27,15 @@ export default function MobileDrawer({
   loginWithGoogle,
   logout,
 }: Props) {
-  // 👈 IMPORTANTE: si no está abierto, NO renderiza nada
+  const handleLogin = async () => {
+    try {
+      await loginWithGoogle();
+    } catch (error) {
+      console.error("Error al iniciar sesión con Google:", error);
+    }
+  };
+
+  // Si no está abierto, no renderiza nada
   if (!open) return null;
 
   return (
@@ -50,7 +58,7 @@ export default function MobileDrawer({
               </div>
             </div>
           ) : (
-            <Button fullWidth onClick={loginWithGoogle}>
+            <Button fullWidth onClick={handleLogin}>
               Iniciar sesión con Google
             </Button>
           )}
