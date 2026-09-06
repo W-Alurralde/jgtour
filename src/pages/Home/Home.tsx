@@ -1,9 +1,9 @@
 import Container from "@/components/ui/Container";
 import Badge from "@/components/ui/Badge";
 import FeaturedExperiences from "@/features/experiences/components/FeaturedExperiences";
-
 import DestinationMap from "@/features/maps/components/DestinationMap";
 import SearchBar from "@/components/search/SearchBar/SearchBar";
+import PackageSection from "@/features/packages/components/PackageSection";
 
 export default function Home() {
   return (
@@ -59,14 +59,18 @@ export default function Home() {
         {/* NUEVA BARRA PREMIUM */}
         <SearchBar />
         <FeaturedExperiences />
+        <PackageSection />
+
+        {/* MAPA */}
+        <section></section>
 
         {/* MAPA */}
         <section style={{ display: "grid", gap: 16 }}>
           <div style={{ display: "grid", gap: 6 }}>
             <h2 style={{ margin: 0 }}>Destinos destacados de Salta</h2>
             <p style={{ margin: 0, color: "#64748b" }}>
-              Explorá los puntos más emblemáticos de la provincia y planificá
-              tu próxima aventura desde JGTravel.
+              Explorá los puntos más emblemáticos de la provincia y planificá tu
+              próxima aventura desde JGTravel.
             </p>
           </div>
 

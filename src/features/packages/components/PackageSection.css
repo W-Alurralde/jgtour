@@ -1,0 +1,159 @@
+.packages-section {
+  display: grid;
+  gap: 24px;
+}
+
+.packages-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 24px;
+}
+
+.packages-heading h2 {
+  margin: 4px 0 8px;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+}
+
+.packages-heading p {
+  margin: 0;
+  color: #64748b;
+  max-width: 680px;
+}
+
+.packages-eyebrow {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0057b8;
+}
+
+.packages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.package-card {
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.package-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
+}
+
+.package-card-image {
+  position: relative;
+  height: 190px;
+  overflow: hidden;
+}
+
+.package-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.package-card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: #f1f5f9;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.package-card-nights {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.package-card-content {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+}
+
+.package-card-route {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.package-card-content h3 {
+  margin: 4px 0 0;
+  font-size: 1.25rem;
+}
+
+.package-card-details {
+  display: grid;
+  gap: 7px;
+}
+
+.package-card-details p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.package-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.package-card-from {
+  display: block;
+  color: #64748b;
+  font-size: 0.75rem;
+}
+
+.package-card-price {
+  display: block;
+  margin-top: 2px;
+  font-size: 1.35rem;
+}
+
+.package-card-button {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 16px;
+  background: #0057b8;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.package-card-updated {
+  color: #94a3b8;
+  font-size: 0.72rem;
+}
+
+@media (max-width: 640px) {
+  .package-card-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .package-card-button {
+    width: 100%;
+  }
+}
