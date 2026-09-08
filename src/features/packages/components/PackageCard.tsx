@@ -1,11 +1,16 @@
-import type { TravelPackage } from "@/features/packages/types/package.types";
 import { useState } from "react";
+
+import BookingForm from "./BookingForm";
+
+import type { TravelPackage } from "@/features/packages/types/package.types";
 
 interface PackageCardProps {
   travelPackage: TravelPackage;
 }
 
-export default function PackageCard({ travelPackage }: PackageCardProps) {
+export default function PackageCard({
+  travelPackage,
+}: PackageCardProps) {
   const {
     name,
     origin,
@@ -22,6 +27,9 @@ export default function PackageCard({ travelPackage }: PackageCardProps) {
     updatedAt,
   } = travelPackage;
 
+  const [showDetails, setShowDetails] = useState(false);
+  const [showBooking, setShowBooking] = useState(false);
+
   const formatDate = (date: string) =>
     new Intl.DateTimeFormat("es-AR", {
       day: "2-digit",
@@ -29,8 +37,6 @@ export default function PackageCard({ travelPackage }: PackageCardProps) {
       year: "numeric",
       timeZone: "UTC",
     }).format(new Date(date));
-
-  const [showDetails, setShowDetails] = useState(false);
 
   return (
     <article className="package-card">
@@ -43,7 +49,9 @@ export default function PackageCard({ travelPackage }: PackageCardProps) {
           </div>
         )}
 
-        <span className="package-card-nights">{nights} noches</span>
+        <span className="package-card-nights">
+          {nights} noches
+        </span>
       </div>
 
       <div className="package-card-content">
@@ -57,8 +65,8 @@ export default function PackageCard({ travelPackage }: PackageCardProps) {
 
         <div className="package-card-details">
           <p>
-            <strong>Fechas:</strong> {formatDate(departureDate)} –{" "}
-            {formatDate(returnDate)}
+            <strong>Fechas:</strong>{" "}
+            {formatDate(departureDate)} – {formatDate(returnDate)}
           </p>
 
           <p>
@@ -72,7 +80,9 @@ export default function PackageCard({ travelPackage }: PackageCardProps) {
 
         <div className="package-card-footer">
           <div>
-            <span className="package-card-from">Desde</span>
+            <span className="package-card-from">
+              Desde
+            </span>
 
             <strong className="package-card-price">
               {currency} {price.toLocaleString("es-AR")}
@@ -82,9 +92,13 @@ export default function PackageCard({ travelPackage }: PackageCardProps) {
           <button
             type="button"
             className="package-card-button"
-            onClick={() => setShowDetails((prev) => !prev)}
+            onClick={() =>
+              setShowDetails((prev) => !prev)
+            }
           >
-            {showDetails ? "Ocultar detalle" : "Ver paquete"}
+            {showDetails
+              ? "Ocultar detalle"
+              : "Ver paquete"}
           </button>
         </div>
 
@@ -131,10 +145,21 @@ export default function PackageCard({ travelPackage }: PackageCardProps) {
                 </a>
               )}
 
-              <button type="button" className="package-reserve-button">
+              <button
+                type="button"
+                className="package-reserve-button"
+                onClick={() => setShowBooking(true)}
+              >
                 Solicitar reserva
               </button>
             </div>
+
+            {showBooking && (
+              <BookingForm
+                travelPackage={travelPackage}
+                onClose={() => setShowBooking(false)}
+              />
+            )}
           </div>
         )}
 
