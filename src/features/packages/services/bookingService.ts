@@ -1,6 +1,16 @@
 export interface CreateBookingInput {
   packageId: string;
   packageName: string;
+
+  price: number;
+  currency: string;
+
+  origin: string;
+  destination: string;
+
+  departureDate: string;
+  returnDate: string;
+
   fullName: string;
   email: string;
   phone?: string;

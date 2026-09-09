@@ -5,183 +5,11 @@
   z-index: 500;
 }
 
-.search-panel {
-  position: relative;
-  z-index: 600;
 
-  background: #ffffff;
-  border-radius: 999px;
-  padding: 0.75rem;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr) auto;
-  gap: 0.75rem;
-  align-items: center;
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
-}
+/* =========================================
+   CATEGORÍAS
+========================================= */
 
-.search-field {
-  display: grid;
-  gap: 0.35rem;
-  padding: 0 1rem;
-  border-right: 1px solid #e2e8f0;
-}
-
-.search-field:last-child {
-  border-right: none;
-}
-
-.search-field label {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-.search-field input {
-  border: none;
-  outline: none;
-  font-size: 0.95rem;
-  color: #334155;
-  background: transparent;
-}
-
-.travelers-trigger-wrapper {
-  position: relative;
-}
-
-.travelers-trigger {
-  border: none;
-  background: transparent;
-  text-align: left;
-  padding: 0;
-  color: #475569;
-  cursor: pointer;
-  font-size: 0.95rem;
-}
-
-.search-submit {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-
-  border: none;
-  border-radius: 999px;
-  padding: 1rem 1.75rem;
-
-  background: linear-gradient(135deg, #0057b8 0%, #00b8d9 100%);
-  color: #ffffff;
-
-  font-weight: 700;
-  font-size: 0.95rem;
-  letter-spacing: 0.01em;
-
-  cursor: pointer;
-  min-width: 150px;
-
-  box-shadow: 0 10px 24px rgba(0, 87, 184, 0.28);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.search-submit:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 32px rgba(0, 87, 184, 0.36);
-}
-
-.search-submit:active {
-  transform: translateY(0);
-}
-
-.travelers-popover {
-  position: absolute;
-  top: calc(100% + 12px);
-  right: 0;
-
-  width: 360px;
-  max-width: calc(100vw - 2rem);
-
-  background: #ffffff;
-  border-radius: 28px;
-  padding: 1.5rem;
-
-  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.22);
-
-  z-index: 99999;
-
-  display: grid;
-  gap: 1rem;
-}
-
-.popover-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.counter {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.counter button {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: #eef2ff;
-  color: #1d4ed8;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.popover-class {
-  display: grid;
-  gap: 0.35rem;
-}
-
-.popover-class select {
-  border: 1px solid #dbe4f0;
-  border-radius: 14px;
-  padding: 0.8rem 1rem;
-}
-
-.apply-btn {
-  width: 100%;
-  border: none;
-  border-radius: 16px;
-  padding: 0.9rem 1rem;
-  background: linear-gradient(135deg, #0057b8, #11c5e8);
-  color: #ffffff;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-@media (max-width: 992px) {
-  .search-panel {
-    border-radius: 28px;
-    grid-template-columns: 1fr;
-  }
-
-  .search-field {
-    border-right: none;
-    border-bottom: 1px solid #e2e8f0;
-    padding: 0.75rem 0;
-  }
-
-  .search-field:last-of-type {
-    border-bottom: none;
-  }
-
-  .travelers-popover {
-    left: 0;
-    right: 0;
-    width: auto;
-  }
-
-  .search-submit {
-    width: 100%;
-  }
-}
 .category-strip {
   display: flex;
   gap: 0.75rem;
@@ -203,15 +31,22 @@
   background: #ffffff;
 
   padding: 0.8rem 1rem;
+
   border-radius: 999px;
 
   color: #334155;
+
   font-weight: 600;
   white-space: nowrap;
+
   cursor: pointer;
 
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
-  transition: all 0.2s ease;
+  box-shadow:
+    0 4px 12px
+    rgba(15, 23, 42, 0.05);
+
+  transition:
+    all 0.2s ease;
 }
 
 .category-pill:hover {
@@ -220,18 +55,456 @@
 }
 
 .category-pill.active {
-  background: linear-gradient(135deg, #0057b8, #00b8d9);
+  background:
+    linear-gradient(
+      135deg,
+      #0057b8,
+      #00b8d9
+    );
+
   border-color: transparent;
+
   color: #ffffff;
-  box-shadow: 0 10px 20px rgba(0, 87, 184, 0.24);
+
+  box-shadow:
+    0 10px 20px
+    rgba(0, 87, 184, 0.24);
 }
 
 .category-icon {
   font-size: 1rem;
 }
-/* =========================
+
+
+/* =========================================
+   PANEL
+========================================= */
+
+.search-panel {
+  position: relative;
+  z-index: 600;
+
+  background: #ffffff;
+
+  border-radius: 32px;
+
+  padding: 0.9rem;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(6, minmax(120px, 1fr));
+
+  gap: 0.65rem;
+
+  align-items: end;
+
+  box-shadow:
+    0 12px 32px
+    rgba(15, 23, 42, 0.08);
+}
+
+
+/* =========================================
+   TIPO DE VIAJE
+========================================= */
+
+.trip-type-selector {
+  grid-column: 1 / -1;
+
+  display: flex;
+  align-items: center;
+
+  gap: 2rem;
+
+  padding:
+    0.2rem
+    1rem
+    0.4rem;
+}
+
+.trip-type-option {
+  display: flex;
+  align-items: center;
+
+  gap: 0.55rem;
+
+  cursor: pointer;
+
+  color: #334155;
+
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  user-select: none;
+}
+
+.trip-type-option input {
+  position: absolute;
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+.trip-type-custom-radio {
+  position: relative;
+
+  width: 20px;
+  height: 20px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #e5e7eb;
+
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.trip-type-option
+input:checked
++
+.trip-type-custom-radio {
+  background: #14213d;
+
+  box-shadow:
+    inset 0 0 0 5px #14213d;
+}
+
+.trip-type-option
+input:checked
++
+.trip-type-custom-radio::after {
+  content: "";
+
+  position: absolute;
+
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  top: 50%;
+  left: 50%;
+
+  transform:
+    translate(-50%, -50%);
+}
+
+
+/* =========================================
+   CAMPOS
+========================================= */
+
+.search-field {
+  display: grid;
+
+  gap: 0.35rem;
+
+  min-width: 0;
+
+  padding: 0 0.8rem;
+
+  border-right:
+    1px solid #e2e8f0;
+}
+
+.search-field label {
+  font-size: 0.72rem;
+  font-weight: 700;
+
+  color: #0f172a;
+}
+
+
+/* Inputs + selects */
+
+.search-field input,
+.search-field select {
+  width: 100%;
+
+  min-width: 0;
+
+  box-sizing: border-box;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  color: #334155;
+
+  font-family: inherit;
+  font-size: 0.88rem;
+
+  padding:
+    0.25rem
+    0;
+}
+
+
+/* Select */
+
+.search-field select {
+  appearance: none;
+  -webkit-appearance: none;
+
+  cursor: pointer;
+
+  padding-right: 1.3rem;
+
+  background-image:
+    linear-gradient(
+      45deg,
+      transparent 50%,
+      #64748b 50%
+    ),
+    linear-gradient(
+      135deg,
+      #64748b 50%,
+      transparent 50%
+    );
+
+  background-position:
+    calc(100% - 10px) 50%,
+    calc(100% - 5px) 50%;
+
+  background-size:
+    5px 5px,
+    5px 5px;
+
+  background-repeat:
+    no-repeat;
+}
+
+
+/* Placeholder visual */
+
+.search-field input::placeholder {
+  color: #94a3b8;
+}
+
+
+/* Campo regreso deshabilitado */
+
+.search-field--disabled {
+  opacity: 0.46;
+}
+
+.search-field--disabled input {
+  cursor: not-allowed;
+}
+
+.search-field input:disabled {
+  color: #94a3b8;
+}
+
+
+/* =========================================
+   VIAJEROS
+========================================= */
+
+.travelers-trigger-wrapper {
+  position: relative;
+}
+
+.travelers-trigger {
+  border: none;
+
+  background: transparent;
+
+  text-align: left;
+
+  padding: 0;
+
+  color: #475569;
+
+  cursor: pointer;
+
+  font-size: 0.88rem;
+}
+
+
+/* =========================================
+   BOTÓN BUSCAR
+========================================= */
+
+.search-submit {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.5rem;
+
+  border: none;
+
+  border-radius: 999px;
+
+  padding:
+    0.9rem
+    1.5rem;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0057b8 0%,
+      #00b8d9 100%
+    );
+
+  color: #ffffff;
+
+  font-weight: 700;
+  font-size: 0.9rem;
+
+  letter-spacing: 0.01em;
+
+  cursor: pointer;
+
+  min-width: 150px;
+
+  box-shadow:
+    0 10px 24px
+    rgba(0, 87, 184, 0.28);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.search-submit:hover {
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 16px 32px
+    rgba(0, 87, 184, 0.36);
+}
+
+.search-submit:active {
+  transform:
+    translateY(0);
+}
+
+
+/* =========================================
+   POPOVER VIAJEROS
+========================================= */
+
+.travelers-popover {
+  position: absolute;
+
+  top:
+    calc(100% + 12px);
+
+  right: 0;
+
+  width: 360px;
+
+  max-width:
+    calc(100vw - 2rem);
+
+  background: #ffffff;
+
+  border-radius: 28px;
+
+  padding: 1.5rem;
+
+  box-shadow:
+    0 24px 64px
+    rgba(15, 23, 42, 0.22);
+
+  z-index: 99999;
+
+  display: grid;
+
+  gap: 1rem;
+}
+
+.popover-row {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+}
+
+.counter {
+  display: flex;
+
+  align-items: center;
+
+  gap: 0.75rem;
+}
+
+.counter button {
+  width: 32px;
+  height: 32px;
+
+  border-radius: 50%;
+
+  border: none;
+
+  background: #eef2ff;
+
+  color: #1d4ed8;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.popover-class {
+  display: grid;
+
+  gap: 0.35rem;
+}
+
+.popover-class select {
+  border:
+    1px solid #dbe4f0;
+
+  border-radius: 14px;
+
+  padding:
+    0.8rem
+    1rem;
+}
+
+.apply-btn {
+  width: 100%;
+
+  border: none;
+
+  border-radius: 16px;
+
+  padding:
+    0.9rem
+    1rem;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0057b8,
+      #11c5e8
+    );
+
+  color: #ffffff;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+
+/* =========================================
    LEAFLET FIX
-   ========================= */
+========================================= */
 
 .leaflet-container {
   z-index: 1 !important;
@@ -242,4 +515,154 @@
 .leaflet-bottom,
 .leaflet-control {
   z-index: 1 !important;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 992px) {
+
+  .search-panel {
+    border-radius: 28px;
+
+    grid-template-columns: 1fr;
+  }
+
+  .trip-type-selector {
+    grid-column: 1;
+
+    padding:
+      0.5rem 0;
+
+    gap: 1.5rem;
+  }
+
+  .search-field {
+    border-right: none;
+
+    border-bottom:
+      1px solid #e2e8f0;
+
+    padding:
+      0.75rem 0;
+  }
+
+  .search-field:last-of-type {
+    border-bottom: none;
+  }
+
+  .travelers-popover {
+    left: 0;
+    right: 0;
+
+    width: auto;
+  }
+
+  .search-submit {
+    width: 100%;
+  }
+
+}
+/* =========================================
+----estoy con dudas------
+   ASISTENCIA ESPECIAL
+========================================= */
+
+.assistance-section {
+  padding-top: 0.9rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.assistance-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 1rem;
+
+  width: 100%;
+}
+
+.assistance-checkbox {
+  display: flex;
+  align-items: center;
+
+  gap: 0.5rem;
+
+  flex-shrink: 0;
+
+  color: #334155;
+
+  font-size: 0.88rem;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.assistance-checkbox input {
+  width: 17px;
+  height: 17px;
+
+  margin: 0;
+
+  accent-color: #0057b8;
+
+  cursor: pointer;
+}
+
+.assistance-info {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #0057b8;
+
+  font-size: 1rem;
+
+  cursor: help;
+}
+
+.assistance-select {
+  flex: 1;
+
+  min-width: 0;
+
+  max-width: 190px;
+
+  border: 1px solid #dbe4f0;
+
+  border-radius: 12px;
+
+  padding: 0.65rem 0.75rem;
+
+  background: #ffffff;
+
+  color: #334155;
+
+  font-family: inherit;
+  font-size: 0.82rem;
+
+  cursor: pointer;
+}
+
+
+/* En pantallas chicas pasa abajo */
+
+@media (max-width: 480px) {
+
+  .assistance-row {
+    align-items: stretch;
+    flex-direction: column;
+
+    gap: 0.7rem;
+  }
+
+  .assistance-select {
+    width: 100%;
+    max-width: none;
+  }
+
 }

@@ -1,0 +1,155 @@
+.flights-page {
+  min-height: 100vh;
+
+  padding:
+    48px 24px 80px;
+
+  background: #f7f4ee;
+}
+
+.flights-page__header {
+  max-width: 950px;
+
+  margin:
+    0 auto 32px;
+}
+
+.flights-page__eyebrow {
+  color: #00b8d9;
+
+  font-size: 0.8rem;
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.08em;
+}
+
+.flights-page__header h1 {
+  margin:
+    8px 0 10px;
+
+  color: #2c3440;
+
+  font-size: clamp(
+    2rem,
+    5vw,
+    3rem
+  );
+}
+
+.flights-page__header p {
+  margin: 0;
+
+  max-width: 650px;
+
+  color: #667085;
+
+  line-height: 1.6;
+}
+
+.flights-page__results {
+  display: flex;
+  flex-direction: column;
+
+  gap: 22px;
+
+  max-width: 950px;
+
+  margin: 0 auto;
+}
+
+.flights-page__status,
+.flights-page__empty {
+  max-width: 950px;
+
+  margin: 40px auto;
+
+  color: #667085;
+}
+
+.flights-page__error {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+
+  max-width: 950px;
+
+  margin: 40px auto;
+
+  padding: 20px;
+
+  background: #ffffff;
+
+  border-radius: 12px;
+
+  color: #2c3440;
+}
+/* =========================================
+   RESUMEN DE BÚSQUEDA
+========================================= */
+
+.flights-page__search-summary {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 18px;
+
+  max-width: 950px;
+
+  margin:
+    0 auto 28px;
+
+  padding: 18px 20px;
+
+  background: #ffffff;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 6px 20px
+    rgba(44, 52, 64, 0.06);
+}
+
+.flights-page__search-summary > div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+
+  min-width: 110px;
+}
+
+.flights-page__search-summary span {
+  color: #667085;
+
+  font-size: 0.72rem;
+}
+
+.flights-page__search-summary strong {
+  color: #2c3440;
+
+  font-size: 0.9rem;
+}
+
+.flights-page__empty {
+  padding: 28px;
+
+  background: #ffffff;
+
+  border-radius: 14px;
+
+  text-align: center;
+}
+
+.flights-page__empty strong {
+  color: #2c3440;
+}
+
+.flights-page__empty p {
+  margin:
+    8px 0 0;
+
+  color: #667085;
+}

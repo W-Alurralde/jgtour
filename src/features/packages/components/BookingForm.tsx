@@ -37,6 +37,16 @@ export default function BookingForm({
       const booking: CreateBookingInput = {
         packageId: travelPackage.id,
         packageName: travelPackage.name,
+
+        price: travelPackage.price,
+        currency: travelPackage.currency,
+
+        origin: travelPackage.origin,
+        destination: travelPackage.destination,
+
+        departureDate: travelPackage.departureDate,
+        returnDate: travelPackage.returnDate,
+
         fullName,
         email,
         phone,
@@ -50,9 +60,7 @@ export default function BookingForm({
       setSuccess(true);
     } catch (err) {
       setError(
-        err instanceof Error
-          ? err.message
-          : "No se pudo enviar la solicitud"
+        err instanceof Error ? err.message : "No se pudo enviar la solicitud",
       );
     } finally {
       setSubmitting(false);
@@ -65,8 +73,7 @@ export default function BookingForm({
         <h4>Solicitud recibida</h4>
 
         <p>
-          Recibimos tu solicitud para{" "}
-          <strong>{travelPackage.name}</strong>.
+          Recibimos tu solicitud para <strong>{travelPackage.name}</strong>.
         </p>
 
         {bookingId && (
@@ -76,8 +83,8 @@ export default function BookingForm({
         )}
 
         <p>
-          El equipo de JGTravel verificará disponibilidad y
-          precio antes de confirmar la reserva.
+          El equipo de JGTravel verificará disponibilidad y precio antes de
+          confirmar la reserva.
         </p>
 
         <button
@@ -136,9 +143,7 @@ export default function BookingForm({
           min="1"
           max="20"
           value={travelers}
-          onChange={(event) =>
-            setTravelers(Number(event.target.value))
-          }
+          onChange={(event) => setTravelers(Number(event.target.value))}
           required
         />
       </label>
@@ -153,9 +158,7 @@ export default function BookingForm({
         />
       </label>
 
-      {error && (
-        <p className="booking-error">{error}</p>
-      )}
+      {error && <p className="booking-error">{error}</p>}
 
       <div className="booking-form-actions">
         <button
@@ -172,9 +175,7 @@ export default function BookingForm({
           className="package-reserve-button"
           disabled={submitting}
         >
-          {submitting
-            ? "Enviando..."
-            : "Enviar solicitud"}
+          {submitting ? "Enviando..." : "Enviar solicitud"}
         </button>
       </div>
     </form>
