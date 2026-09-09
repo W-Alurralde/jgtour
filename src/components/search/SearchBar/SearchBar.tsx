@@ -16,7 +16,6 @@ import type { HotelSearchState } from "@/features/hotels/types/hotelSearch.types
 
 import { searchCategories } from "./categories";
 
-
 const airports = [
   {
     code: "AEP",
@@ -38,7 +37,6 @@ const airports = [
   },
 ];
 
-
 interface TravelersState {
   adults: number;
   children: number;
@@ -51,407 +49,232 @@ interface TravelersState {
   assistanceType: AssistanceType | "";
 }
 
-
 export default function SearchBar() {
+  const [showTravelers, setShowTravelers] = useState(false);
 
-  const [showTravelers, setShowTravelers] =
-    useState(false);
-
-  const [activeCategory, setActiveCategory] =
-    useState("flights");
-
+  const [activeCategory, setActiveCategory] = useState("flights");
 
   // =========================================
   // VUELOS
   // =========================================
 
-  const [tripType, setTripType] =
-    useState<"oneway" | "roundtrip">("oneway");
+  const [tripType, setTripType] = useState<"oneway" | "roundtrip">("oneway");
 
-  const [origin, setOrigin] =
-    useState("");
+  const [origin, setOrigin] = useState("");
 
-  const [destination, setDestination] =
-    useState("");
+  const [destination, setDestination] = useState("");
 
-  const [checkIn, setCheckIn] =
-    useState("");
+  const [checkIn, setCheckIn] = useState("");
 
-  const [checkOut, setCheckOut] =
-    useState("");
+  const [checkOut, setCheckOut] = useState("");
 
-  const [voucher, setVoucher] =
-    useState("");
-
+  const [voucher, setVoucher] = useState("");
 
   // =========================================
   // VIAJEROS
   // =========================================
 
-  const [travelers, setTravelers] =
-    useState<TravelersState>({
-      adults: 1,
-      children: 0,
-      infants: 0,
-      pets: 0,
+  const [travelers, setTravelers] = useState<TravelersState>({
+    adults: 1,
+    children: 0,
+    infants: 0,
+    pets: 0,
 
-      cabinClass: "economy",
+    cabinClass: "economy",
 
-      needsAssistance: false,
-      assistanceType: "",
-    });
+    needsAssistance: false,
+    assistanceType: "",
+  });
 
+  const { searchFlights } = useFlightSearch();
 
-  const { searchFlights } =
-    useFlightSearch();
-
-  const { searchHotels } =
-    useHotelSearch();
-
+  const { searchHotels } = useHotelSearch();
 
   // =========================================
   // RESUMEN DE VIAJEROS
   // =========================================
 
   const summaryParts = [
-    `${travelers.adults} adulto${
-      travelers.adults !== 1 ? "s" : ""
-    }`,
+    `${travelers.adults} adulto${travelers.adults !== 1 ? "s" : ""}`,
   ];
 
-
   if (travelers.children > 0) {
-
     summaryParts.push(
-      `${travelers.children} niño${
-        travelers.children !== 1
-          ? "s"
-          : ""
-      }`
+      `${travelers.children} niño${travelers.children !== 1 ? "s" : ""}`,
     );
-
   }
-
 
   if (travelers.infants > 0) {
-
     summaryParts.push(
-      `${travelers.infants} bebé${
-        travelers.infants !== 1
-          ? "s"
-          : ""
-      }`
+      `${travelers.infants} bebé${travelers.infants !== 1 ? "s" : ""}`,
     );
-
   }
-
 
   if (travelers.pets > 0) {
-
     summaryParts.push(
-      `${travelers.pets} mascota${
-        travelers.pets !== 1
-          ? "s"
-          : ""
-      }`
+      `${travelers.pets} mascota${travelers.pets !== 1 ? "s" : ""}`,
     );
-
   }
 
-
-  const cabinLabels: Record<
-    CabinClass,
-    string
-  > = {
+  const cabinLabels: Record<CabinClass, string> = {
     economy: "Económica",
-    "premium-economy":
-      "Premium Economy",
-    business:
-      "Ejecutiva / Business",
-    first:
-      "Primera clase",
-    "premium-business":
-      "Premium Business",
-    "premium-first":
-      "Premium First",
+    "premium-economy": "Premium Economy",
+    business: "Ejecutiva / Business",
+    first: "Primera clase",
+    "premium-business": "Premium Business",
+    "premium-first": "Premium First",
   };
 
+  summaryParts.push(cabinLabels[travelers.cabinClass]);
 
-  summaryParts.push(
-    cabinLabels[
-      travelers.cabinClass
-    ]
-  );
-
-
-  if (
-    travelers.needsAssistance
-  ) {
-
-    summaryParts.push(
-      "Asistencia"
-    );
-
+  if (travelers.needsAssistance) {
+    summaryParts.push("Asistencia");
   }
 
+  const summary = summaryParts.join(" · ");
 
-  const summary =
-    summaryParts.join(" · ");
+  // =========================================
+  // FECHA MÍNIMA DE RESERVA
+  // =========================================
 
+  const today = new Date().toLocaleDateString("en-CA");
 
   // =========================================
   // CAMBIO DE CATEGORÍA
   // =========================================
 
-  const handleCategoryChange =
-    (categoryId: string) => {
+  const handleCategoryChange = (categoryId: string) => {
+    setActiveCategory(categoryId);
 
-      setActiveCategory(
-        categoryId
-      );
-
-      setShowTravelers(
-        false
-      );
-
-    };
-
+    setShowTravelers(false);
+  };
 
   // =========================================
   // TIPO DE VIAJE
   // =========================================
 
-  const handleTripTypeChange =
-    (
-      type:
-        | "oneway"
-        | "roundtrip"
-    ) => {
+  const handleTripTypeChange = (type: "oneway" | "roundtrip") => {
+    setTripType(type);
 
-      setTripType(type);
-
-      if (
-        type === "oneway"
-      ) {
-
-        setCheckOut("");
-
-      }
-
-    };
-
+    if (type === "oneway") {
+      setCheckOut("");
+    }
+  };
 
   // =========================================
   // BUSCAR
   // =========================================
 
   const handleSearch = () => {
-
     // =========================================
     // VUELOS
     // =========================================
 
-    if (
-      activeCategory === "flights"
-    ) {
-
-      if (
-        !origin ||
-        !destination ||
-        !checkIn
-      ) {
-
-        alert(
-          "Completá origen, destino y fecha de ida."
-        );
+    if (activeCategory === "flights") {
+      if (!origin || !destination || !checkIn) {
+        alert("Completá origen, destino y fecha de ida.");
 
         return;
-
       }
 
-
-      if (
-        origin === destination
-      ) {
-
-        alert(
-          "El origen y el destino no pueden ser iguales."
-        );
+      if (origin === destination) {
+        alert("El origen y el destino no pueden ser iguales.");
 
         return;
-
       }
 
-
-      if (
-        tripType === "roundtrip" &&
-        !checkOut
-      ) {
-
-        alert(
-          "Seleccioná la fecha de regreso."
-        );
+      if (tripType === "roundtrip" && !checkOut) {
+        alert("Seleccioná la fecha de regreso.");
 
         return;
-
       }
 
-
-      if (
-        tripType === "roundtrip" &&
-        checkOut < checkIn
-      ) {
-
-        alert(
-          "La fecha de regreso no puede ser anterior a la fecha de ida."
-        );
+      if (tripType === "roundtrip" && checkOut < checkIn) {
+        alert("La fecha de regreso no puede ser anterior a la fecha de ida.");
 
         return;
-
       }
 
-
-      if (
-        travelers.needsAssistance &&
-        !travelers.assistanceType
-      ) {
-
-        alert(
-          "Seleccioná el tipo de asistencia requerida."
-        );
+      if (travelers.needsAssistance && !travelers.assistanceType) {
+        alert("Seleccioná el tipo de asistencia requerida.");
 
         return;
-
       }
 
-
-      const flightSearch:
-        FlightSearchState = {
-
+      const flightSearch: FlightSearchState = {
         tripType,
 
-        origin:
-          origin.toUpperCase(),
+        origin: origin.toUpperCase(),
 
-        destination:
-          destination.toUpperCase(),
+        destination: destination.toUpperCase(),
 
-        departureDate:
-          checkIn,
+        departureDate: checkIn,
 
-        returnDate:
-          tripType ===
-          "roundtrip"
-            ? checkOut
-            : undefined,
-
+        returnDate: tripType === "roundtrip" ? checkOut : undefined,
 
         // =====================================
         // PASAJEROS
         // =====================================
 
         passengers: {
+          adults: travelers.adults,
 
-          adults:
-            travelers.adults,
+          children: travelers.children,
 
-          children:
-            travelers.children,
+          infants: travelers.infants,
 
-          infants:
-            travelers.infants,
-
-          pets:
-            travelers.pets,
-
+          pets: travelers.pets,
         },
-
 
         // =====================================
         // CLASE
         // =====================================
 
-        cabinClass:
-          travelers.cabinClass,
-
+        cabinClass: travelers.cabinClass,
 
         // =====================================
         // ASISTENCIA
         // =====================================
 
         assistance: {
-
-          needed:
-            travelers.needsAssistance,
+          needed: travelers.needsAssistance,
 
           type:
-            travelers.needsAssistance &&
-            travelers.assistanceType
+            travelers.needsAssistance && travelers.assistanceType
               ? travelers.assistanceType
               : undefined,
-
         },
-
 
         // =====================================
         // VOUCHER
         // =====================================
 
-        voucher:
-          voucher.trim() ||
-          undefined,
-
+        voucher: voucher.trim() || undefined,
       };
 
-
-      searchFlights(
-        flightSearch
-      );
+      searchFlights(flightSearch);
 
       return;
-
     }
-
 
     // =========================================
     // HOTELES
     // =========================================
 
-    if (
-      activeCategory === "hotels"
-    ) {
-
-      if (
-        !destination ||
-        !checkIn ||
-        !checkOut
-      ) {
-
-        alert(
-          "Completá destino, check-in y check-out."
-        );
+    if (activeCategory === "hotels") {
+      if (!destination || !checkIn || !checkOut) {
+        alert("Completá destino, check-in y check-out.");
 
         return;
-
       }
 
-
-      if (
-        checkOut <= checkIn
-      ) {
-
-        alert(
-          "El check-out debe ser posterior al check-in."
-        );
+      if (checkOut <= checkIn) {
+        alert("El check-out debe ser posterior al check-in.");
 
         return;
-
       }
 
-
-      const hotelSearch:
-        HotelSearchState = {
-
+      const hotelSearch: HotelSearchState = {
         destination,
 
         checkIn,
@@ -462,614 +285,311 @@ export default function SearchBar() {
           {
             id: 1,
 
-            adults:
-              travelers.adults,
+            adults: travelers.adults,
 
-            children:
-              travelers.children,
+            children: travelers.children,
           },
         ],
 
-        voucher:
-          voucher.trim() ||
-          undefined,
-
+        voucher: voucher.trim() || undefined,
       };
 
-
-      searchHotels(
-        hotelSearch
-      );
+      searchHotels(hotelSearch);
 
       return;
-
     }
-
 
     // =========================================
     // RESTO DE CATEGORÍAS
     // =========================================
 
-    alert(
-      `La categoría ${activeCategory} se conectará próximamente.`
-    );
-
+    alert(`La categoría ${activeCategory} se conectará próximamente.`);
   };
 
-
   return (
-
     <div className="search-bar">
-
       {/* =========================================
           CATEGORÍAS
       ========================================= */}
 
       <div className="category-strip">
+        {searchCategories.map((category) => (
+          <button
+            key={category.id}
+            type="button"
+            className={`category-pill ${
+              activeCategory === category.id ? "active" : ""
+            }`}
+            onClick={() => handleCategoryChange(category.id)}
+          >
+            <span className="category-icon">
+              {category.id === "flights" && "✈"}
 
-        {searchCategories.map(
-          (category) => (
+              {category.id === "hotels" && "⌂"}
 
-            <button
-              key={
-                category.id
-              }
-              type="button"
-              className={`category-pill ${
-                activeCategory ===
-                category.id
-                  ? "active"
-                  : ""
-              }`}
-              onClick={() =>
-                handleCategoryChange(
-                  category.id
-                )
-              }
-            >
+              {category.id === "buses" && "▣"}
 
-              <span className="category-icon">
+              {category.id === "cruises" && "≋"}
 
-                {category.id ===
-                  "flights" &&
-                  "✈"}
+              {category.id === "food" && "◇"}
 
-                {category.id ===
-                  "hotels" &&
-                  "⌂"}
+              {category.id === "cars" && "▱"}
 
-                {category.id ===
-                  "buses" &&
-                  "▣"}
+              {category.id === "experiences" && "◆"}
 
-                {category.id ===
-                  "cruises" &&
-                  "≋"}
+              {category.id === "disney" && "D"}
+            </span>
 
-                {category.id ===
-                  "food" &&
-                  "◇"}
-
-                {category.id ===
-                  "cars" &&
-                  "▱"}
-
-                {category.id ===
-                  "experiences" &&
-                  "◆"}
-
-                {category.id ===
-                  "disney" &&
-                  "D"}
-
-              </span>
-
-              {category.label}
-
-            </button>
-
-          )
-        )}
-
+            {category.label}
+          </button>
+        ))}
       </div>
-
 
       {/* =========================================
           SEARCH PANEL
       ========================================= */}
 
       <div className="search-panel">
-
         {/* =========================================
             VUELOS
         ========================================= */}
 
-        {activeCategory ===
-          "flights" && (
-
+        {activeCategory === "flights" && (
           <>
-
             {/* TIPO DE VIAJE */}
 
             <div className="trip-type-selector">
-
               <label className="trip-type-option">
-
                 <input
                   type="radio"
                   name="tripType"
                   value="oneway"
-                  checked={
-                    tripType ===
-                    "oneway"
-                  }
-                  onChange={() =>
-                    handleTripTypeChange(
-                      "oneway"
-                    )
-                  }
+                  checked={tripType === "oneway"}
+                  onChange={() => handleTripTypeChange("oneway")}
                 />
 
                 <span className="trip-type-custom-radio" />
 
-                <span>
-                  Sólo ida
-                </span>
-
+                <span>Sólo ida</span>
               </label>
 
-
               <label className="trip-type-option">
-
                 <input
                   type="radio"
                   name="tripType"
                   value="roundtrip"
-                  checked={
-                    tripType ===
-                    "roundtrip"
-                  }
-                  onChange={() =>
-                    handleTripTypeChange(
-                      "roundtrip"
-                    )
-                  }
+                  checked={tripType === "roundtrip"}
+                  onChange={() => handleTripTypeChange("roundtrip")}
                 />
 
                 <span className="trip-type-custom-radio" />
 
-                <span>
-                  Ida y vuelta
-                </span>
-
+                <span>Ida y vuelta</span>
               </label>
-
             </div>
-
 
             {/* ORIGEN */}
 
             <div className="search-field">
-
-              <label>
-                Origen
-              </label>
+              <label>Origen</label>
 
               <select
                 value={origin}
-                onChange={(
-                  event
-                ) =>
-                  setOrigin(
-                    event.target
-                      .value
-                  )
-                }
+                onChange={(event) => setOrigin(event.target.value)}
               >
+                <option value="">Seleccionar origen</option>
 
-                <option value="">
-                  Seleccionar origen
-                </option>
-
-                {airports.map(
-                  (airport) => (
-
-                    <option
-                      key={
-                        airport.code
-                      }
-                      value={
-                        airport.code
-                      }
-                    >
-
-                      {airport.code}
-                      {" · "}
-                      {airport.city}
-
-                    </option>
-
-                  )
-                )}
-
+                {airports.map((airport) => (
+                  <option key={airport.code} value={airport.code}>
+                    {airport.code}
+                    {" · "}
+                    {airport.city}
+                  </option>
+                ))}
               </select>
-
             </div>
-
 
             {/* DESTINO */}
 
             <div className="search-field">
-
-              <label>
-                Destino
-              </label>
+              <label>Destino</label>
 
               <select
-                value={
-                  destination
-                }
-                onChange={(
-                  event
-                ) =>
-                  setDestination(
-                    event.target
-                      .value
-                  )
-                }
+                value={destination}
+                onChange={(event) => setDestination(event.target.value)}
               >
-
-                <option value="">
-                  Seleccionar destino
-                </option>
+                <option value="">Seleccionar destino</option>
 
                 {airports
-                  .filter(
-                    (airport) =>
-                      airport.code !==
-                      origin
-                  )
-                  .map(
-                    (airport) => (
-
-                      <option
-                        key={
-                          airport.code
-                        }
-                        value={
-                          airport.code
-                        }
-                      >
-
-                        {
-                          airport.code
-                        }
-                        {" · "}
-                        {
-                          airport.city
-                        }
-
-                      </option>
-
-                    )
-                  )}
-
+                  .filter((airport) => airport.code !== origin)
+                  .map((airport) => (
+                    <option key={airport.code} value={airport.code}>
+                      {airport.code}
+                      {" · "}
+                      {airport.city}
+                    </option>
+                  ))}
               </select>
-
             </div>
-
 
             {/* IDA */}
 
             <div className="search-field">
-
-              <label>
-                Ida
-              </label>
+              <label>Ida</label>
 
               <input
                 type="date"
                 value={checkIn}
-                onChange={(
-                  event
-                ) =>
-                  setCheckIn(
-                    event.target
-                      .value
-                  )
-                }
+                min={today}
+                onChange={(event) => {
+                  const newDepartureDate = event.target.value;
+
+                  setCheckIn(newDepartureDate);
+
+                  // Si cambia la ida y el regreso
+                  // quedó antes de la nueva fecha,
+                  // limpiamos el regreso.
+
+                  if (checkOut && checkOut < newDepartureDate) {
+                    setCheckOut("");
+                  }
+                }}
               />
-
             </div>
-
 
             {/* REGRESO */}
 
             <div
               className={`search-field ${
-                tripType ===
-                "oneway"
-                  ? "search-field--disabled"
-                  : ""
+                tripType === "oneway" ? "search-field--disabled" : ""
               }`}
             >
-
-              <label>
-                Regreso
-              </label>
+              <label>Regreso</label>
 
               <input
                 type="date"
-                value={
-                  checkOut
-                }
-                disabled={
-                  tripType ===
-                  "oneway"
-                }
-                min={
-                  checkIn ||
-                  undefined
-                }
-                onChange={(
-                  event
-                ) =>
-                  setCheckOut(
-                    event.target
-                      .value
-                  )
-                }
+                value={checkOut}
+                disabled={tripType === "oneway"}
+                min={checkIn || today}
+                onChange={(event) => setCheckOut(event.target.value)}
               />
-
             </div>
-
           </>
-
         )}
-
 
         {/* =========================================
             HOTELES
         ========================================= */}
 
-        {activeCategory ===
-          "hotels" && (
-
+        {activeCategory === "hotels" && (
           <>
-
             <div className="search-field">
-
-              <label>
-                Destino
-              </label>
+              <label>Destino</label>
 
               <input
-                value={
-                  destination
-                }
-                onChange={(
-                  event
-                ) =>
-                  setDestination(
-                    event.target
-                      .value
-                  )
-                }
+                value={destination}
+                onChange={(event) => setDestination(event.target.value)}
                 placeholder="Ej. Salta, Argentina"
               />
-
             </div>
 
-
             <div className="search-field">
-
-              <label>
-                Check-in
-              </label>
+              <label>Check-in</label>
 
               <input
                 type="date"
-                value={
-                  checkIn
-                }
-                onChange={(
-                  event
-                ) =>
-                  setCheckIn(
-                    event.target
-                      .value
-                  )
-                }
+                value={checkIn}
+                onChange={(event) => setCheckIn(event.target.value)}
               />
-
             </div>
 
-
             <div className="search-field">
-
-              <label>
-                Check-out
-              </label>
+              <label>Check-out</label>
 
               <input
                 type="date"
-                value={
-                  checkOut
-                }
-                onChange={(
-                  event
-                ) =>
-                  setCheckOut(
-                    event.target
-                      .value
-                  )
-                }
+                value={checkOut}
+                onChange={(event) => setCheckOut(event.target.value)}
               />
-
             </div>
-
           </>
-
         )}
-
 
         {/* =========================================
             RESTO
         ========================================= */}
 
-        {![
-          "flights",
-          "hotels",
-        ].includes(
-          activeCategory
-        ) && (
-
+        {!["flights", "hotels"].includes(activeCategory) && (
           <>
-
             <div className="search-field">
-
-              <label>
-                Lugar
-              </label>
+              <label>Lugar</label>
 
               <input
-                value={
-                  destination
-                }
-                onChange={(
-                  event
-                ) =>
-                  setDestination(
-                    event.target
-                      .value
-                  )
-                }
+                value={destination}
+                onChange={(event) => setDestination(event.target.value)}
                 placeholder="Salta, Argentina"
               />
-
             </div>
 
-
             <div className="search-field">
-
-              <label>
-                Desde
-              </label>
+              <label>Desde</label>
 
               <input
                 type="date"
-                value={
-                  checkIn
-                }
-                onChange={(
-                  event
-                ) =>
-                  setCheckIn(
-                    event.target
-                      .value
-                  )
-                }
+                value={checkIn}
+                onChange={(event) => setCheckIn(event.target.value)}
               />
-
             </div>
 
-
             <div className="search-field">
-
-              <label>
-                Hasta
-              </label>
+              <label>Hasta</label>
 
               <input
                 type="date"
-                value={
-                  checkOut
-                }
-                onChange={(
-                  event
-                ) =>
-                  setCheckOut(
-                    event.target
-                      .value
-                  )
-                }
+                value={checkOut}
+                onChange={(event) => setCheckOut(event.target.value)}
               />
-
             </div>
-
           </>
-
         )}
-
 
         {/* =========================================
             VIAJEROS
         ========================================= */}
 
         <div className="search-field travelers-trigger-wrapper">
-
-          <label>
-            Viajeros y clase
-          </label>
+          <label>Viajeros y clase</label>
 
           <button
             type="button"
             className="travelers-trigger"
-            onClick={() =>
-              setShowTravelers(
-                (previous) =>
-                  !previous
-              )
-            }
+            onClick={() => setShowTravelers((previous) => !previous)}
           >
             {summary}
           </button>
 
-
           {showTravelers && (
-
             <TravelersPopover
               {...travelers}
-              onChange={
-                setTravelers
-              }
-              onApply={() =>
-                setShowTravelers(
-                  false
-                )
-              }
+              onChange={setTravelers}
+              onApply={() => setShowTravelers(false)}
             />
-
           )}
-
         </div>
-
 
         {/* =========================================
             VOUCHER
         ========================================= */}
 
         <div className="search-field">
-
-          <label>
-            Voucher / Cupón
-          </label>
+          <label>Voucher / Cupón</label>
 
           <input
             value={voucher}
-            onChange={(
-              event
-            ) =>
-              setVoucher(
-                event.target
-                  .value
-              )
-            }
+            onChange={(event) => setVoucher(event.target.value)}
             placeholder="Código opcional"
           />
-
         </div>
-
 
         {/* =========================================
             BUSCAR
@@ -1078,12 +598,9 @@ export default function SearchBar() {
         <button
           className="search-submit"
           type="button"
-          onClick={
-            handleSearch
-          }
+          onClick={handleSearch}
           aria-label="Buscar"
         >
-
           <svg
             width="20"
             height="20"
@@ -1095,28 +612,14 @@ export default function SearchBar() {
             strokeLinejoin="round"
             aria-hidden="true"
           >
+            <circle cx="11" cy="11" r="7" />
 
-            <circle
-              cx="11"
-              cy="11"
-              r="7"
-            />
-
-            <path
-              d="m20 20-4-4"
-            />
-
+            <path d="m20 20-4-4" />
           </svg>
 
-          <span>
-            Buscar
-          </span>
-
+          <span>Buscar</span>
         </button>
-
       </div>
-
     </div>
-
   );
 }
