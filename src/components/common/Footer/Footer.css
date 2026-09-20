@@ -1,0 +1,731 @@
+.jg-footer {
+  width: 100%;
+  padding: 28px 20px;
+  background: #f7f4ee;
+  color: #ffffff;
+}
+
+.jg-footer-container {
+  width: min(1480px, 100%);
+  margin: 0 auto;
+  padding: 20px;
+  overflow: hidden;
+
+  background: #02335e;
+  border-radius: 28px;
+
+  box-shadow:
+    0 20px 60px rgba(2, 51, 94, 0.18);
+}
+
+
+/* ========================================
+   NEWSLETTER
+======================================== */
+
+.footer-newsletter {
+  position: relative;
+
+  min-height: 300px;
+
+  display: grid;
+  grid-template-columns:
+    minmax(220px, 0.8fr)
+    minmax(460px, 1.8fr)
+    minmax(200px, 0.7fr);
+
+  align-items: center;
+
+  padding: 30px 48px;
+
+  overflow: hidden;
+
+  border-radius: 22px;
+
+  isolation: isolate;
+}
+
+.footer-beach {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  z-index: -2;
+}
+
+.footer-newsletter::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(2, 51, 94, 0.08) 0%,
+      rgba(2, 51, 94, 0.36) 40%,
+      rgba(2, 51, 94, 0.25) 100%
+    );
+
+  z-index: -1;
+}
+
+
+/* TARJETA */
+
+.footer-card-image {
+  position: relative;
+  z-index: 2;
+
+  width: min(330px, 100%);
+  max-height: 245px;
+
+  object-fit: contain;
+
+  justify-self: start;
+
+  filter:
+    drop-shadow(
+      0 16px 24px rgba(0, 0, 0, 0.24)
+    );
+}
+
+
+/* NEWSLETTER CENTER */
+
+.footer-newsletter-content {
+  position: relative;
+  z-index: 3;
+
+  width: 100%;
+  max-width: 760px;
+
+  padding: 0 25px;
+}
+
+.footer-newsletter-copy h2 {
+  margin: 0;
+
+  font-size: clamp(1.7rem, 2.5vw, 2.8rem);
+  line-height: 1.08;
+
+  color: #ffffff;
+}
+
+.footer-newsletter-copy p {
+  margin: 10px 0 22px;
+
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+
+/* FORM */
+
+.footer-newsletter-form {
+  width: 100%;
+}
+
+.footer-email-row {
+  display: grid;
+
+  grid-template-columns:
+    minmax(260px, 1fr)
+    auto;
+
+  gap: 12px;
+}
+
+.footer-email-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  min-height: 54px;
+
+  padding: 0 17px;
+
+  background: #ffffff;
+
+  border-radius: 10px;
+
+  color: #64748b;
+}
+
+.footer-email-control input {
+  width: 100%;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: #1e293b;
+
+  font: inherit;
+}
+
+.footer-email-control input::placeholder {
+  color: #94a3b8;
+}
+
+.footer-email-row button {
+  min-height: 54px;
+
+  padding: 0 28px;
+
+  border: 0;
+  border-radius: 10px;
+
+  background: #ff6b4a;
+  color: #ffffff;
+
+  font: inherit;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+.footer-email-row button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.18);
+}
+
+.footer-email-row button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.footer-newsletter-privacy {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  margin-top: 10px;
+
+  font-size: 0.78rem;
+
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.footer-newsletter-message {
+  margin: 8px 0 0;
+
+  color: #ffffff;
+  font-size: 0.82rem;
+}
+
+
+/* SLOGAN */
+
+.footer-slogan {
+  position: relative;
+  z-index: 2;
+
+  width: min(230px, 100%);
+  max-height: 210px;
+
+  object-fit: contain;
+
+  justify-self: end;
+}
+
+
+/* ========================================
+   MAIN
+======================================== */
+
+.footer-main {
+  display: grid;
+
+  grid-template-columns:
+    minmax(270px, 1.35fr)
+    repeat(4, minmax(140px, 1fr));
+
+  gap: 42px;
+
+  padding: 48px 28px 36px;
+}
+
+
+/* BRAND */
+
+.footer-brand {
+  padding-right: 34px;
+
+  border-right:
+    1px solid rgba(255, 255, 255, 0.2);
+}
+
+.footer-logo {
+  width: min(310px, 100%);
+  height: auto;
+
+  object-fit: contain;
+}
+
+.footer-description {
+  max-width: 340px;
+
+  margin: 20px 0 22px;
+
+  color: rgba(255, 255, 255, 0.88);
+
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+
+/* EXPLORA VIVI COMPARTI */
+
+.footer-values {
+  display: flex;
+  justify-content: space-between;
+
+  max-width: 330px;
+
+  gap: 20px;
+}
+
+.footer-values div {
+  display: grid;
+  justify-items: center;
+
+  gap: 8px;
+
+  color: #ffffff;
+
+  font-size: 0.9rem;
+}
+
+.footer-values svg {
+  width: 34px;
+  height: 34px;
+
+  stroke: #00b8d9;
+  stroke-width: 1.5;
+}
+
+
+/* ========================================
+   COLUMNS
+======================================== */
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  gap: 13px;
+}
+
+.footer-column h3,
+.footer-fiscal-data h3 {
+  position: relative;
+
+  margin: 0 0 13px;
+
+  color: #ffffff;
+
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.footer-column h3::after {
+  content: "";
+
+  display: block;
+
+  width: 32px;
+  height: 3px;
+
+  margin-top: 11px;
+
+  border-radius: 20px;
+
+  background: #00b8d9;
+}
+
+.footer-column a {
+  color: rgba(255, 255, 255, 0.88);
+
+  font-size: 0.9rem;
+  text-decoration: none;
+
+  transition:
+    color 150ms ease,
+    transform 150ms ease;
+}
+
+.footer-column a:hover {
+  color: #00b8d9;
+
+  transform: translateX(3px);
+}
+
+
+/* ========================================
+   FISCAL
+======================================== */
+
+.footer-fiscal {
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(300px, 1fr)
+    auto
+    auto;
+
+  align-items: center;
+
+  gap: 28px;
+
+  margin: 0 28px;
+
+  padding: 24px 0;
+
+  border-top:
+    1px solid rgba(255, 255, 255, 0.18);
+}
+
+.footer-arca img {
+  display: block;
+
+  width: min(330px, 100%);
+  max-height: 125px;
+
+  object-fit: contain;
+
+  border-radius: 8px;
+}
+
+.footer-fiscal-data {
+  padding-left: 28px;
+
+  border-left:
+    1px solid rgba(0, 184, 217, 0.5);
+}
+
+.footer-fiscal-data h3 {
+  margin-bottom: 8px;
+}
+
+.footer-fiscal-data p {
+  margin: 4px 0;
+
+  color: rgba(255, 255, 255, 0.88);
+
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+
+/* ========================================
+   SOCIAL
+======================================== */
+
+.footer-social {
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+}
+
+.footer-social a {
+  display: grid;
+  place-items: center;
+
+  width: 31px;
+  height: 31px;
+
+  color: #ffffff;
+
+  text-decoration: none;
+
+  transition:
+    color 150ms ease,
+    transform 150ms ease;
+}
+
+.footer-social a:hover {
+  color: #00b8d9;
+
+  transform: translateY(-3px);
+}
+
+.footer-social svg {
+  width: 24px;
+  height: 24px;
+}
+.footer-social i {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+
+/* VIAJEMOS JUNTOS */
+
+.footer-together {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding-left: 25px;
+
+  border-left:
+    1px solid rgba(255, 255, 255, 0.22);
+
+  white-space: nowrap;
+
+  color: rgba(255, 255, 255, 0.9);
+
+  font-size: 0.85rem;
+}
+
+.footer-together svg {
+  stroke: #00b8d9;
+}
+
+
+/* ========================================
+   BOTTOM
+======================================== */
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  margin: 0 28px;
+
+  padding: 24px 0 8px;
+
+  border-top:
+    1px solid rgba(255, 255, 255, 0.18);
+}
+
+.footer-bottom p {
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.75);
+
+  font-size: 0.78rem;
+}
+
+
+/* ========================================
+   TABLET
+======================================== */
+
+@media (max-width: 1100px) {
+  .footer-newsletter {
+    grid-template-columns:
+      190px
+      minmax(360px, 1fr);
+
+    padding: 28px;
+  }
+
+  .footer-slogan {
+    display: none;
+  }
+
+  .footer-main {
+    grid-template-columns:
+      repeat(2, 1fr);
+
+    gap: 38px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+
+    border-right: 0;
+    border-bottom:
+      1px solid rgba(255, 255, 255, 0.18);
+
+    padding: 0 0 30px;
+  }
+
+  .footer-fiscal {
+    grid-template-columns:
+      auto
+      1fr;
+  }
+
+  .footer-social,
+  .footer-together {
+    margin-top: 10px;
+  }
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 720px) {
+  .jg-footer {
+    padding: 14px;
+  }
+
+  .jg-footer-container {
+    padding: 12px;
+
+    border-radius: 20px;
+  }
+
+  .footer-newsletter {
+    display: flex;
+    flex-direction: column;
+
+    min-height: auto;
+
+    padding: 24px 18px;
+
+    text-align: center;
+  }
+
+  .footer-card-image {
+    width: 180px;
+
+    margin-bottom: 16px;
+
+    justify-self: center;
+  }
+
+  .footer-newsletter-content {
+    padding: 0;
+  }
+
+  .footer-newsletter-copy h2 {
+    font-size: 1.65rem;
+  }
+
+  .footer-email-row {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-email-row button {
+    width: 100%;
+  }
+
+  .footer-newsletter-privacy {
+    justify-content: center;
+  }
+
+  .footer-slogan {
+    display: block;
+
+    width: 150px;
+
+    margin-top: 18px;
+  }
+
+  .footer-main {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 30px 20px;
+
+    padding: 34px 14px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+
+  .footer-logo {
+    max-width: 250px;
+  }
+
+  .footer-values {
+    max-width: 280px;
+  }
+
+  .footer-column a {
+    font-size: 0.82rem;
+  }
+
+  .footer-fiscal {
+    grid-template-columns: 1fr;
+
+    margin: 0 14px;
+
+    text-align: left;
+  }
+
+  .footer-arca img {
+    max-width: 300px;
+  }
+
+  .footer-fiscal-data {
+    padding:
+      18px 0 0;
+
+    border-left: 0;
+    border-top:
+      1px solid rgba(0, 184, 217, 0.4);
+  }
+
+  .footer-social {
+    justify-content: flex-start;
+  }
+
+  .footer-together {
+    padding-left: 0;
+
+    border-left: 0;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+
+    margin: 0 14px;
+
+    gap: 8px;
+  }
+}
+
+
+/* ========================================
+   SMALL MOBILE
+======================================== */
+
+@media (max-width: 460px) {
+  .footer-main {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-brand {
+    grid-column: auto;
+  }
+
+  .footer-values {
+    width: 100%;
+  }
+}
+.footer-newsletter-message-success {
+  color: #ffffff;
+}
+
+.footer-newsletter-message-error {
+  color: #ffe4e0;
+}

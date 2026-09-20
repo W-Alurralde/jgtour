@@ -5,3 +5,4 @@ export * from "./hotels";
 export * from "./payments";
 export * from "./restaurants";
 export * from "./weather";
+export * from "./newsletter";
