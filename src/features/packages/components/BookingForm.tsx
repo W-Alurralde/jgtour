@@ -7,14 +7,22 @@ import {
 
 import type { TravelPackage } from "@/features/packages/types/package.types";
 
+interface BookingSuccessData {
+  bookingId: string;
+  packageId: string;
+  status: "pending";
+}
+
 interface BookingFormProps {
   travelPackage: TravelPackage;
   onClose: () => void;
+  onBookingSuccess?: (data: BookingSuccessData) => void;
 }
 
 export default function BookingForm({
   travelPackage,
   onClose,
+  onBookingSuccess,
 }: BookingFormProps) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -27,7 +35,9 @@ export default function BookingForm({
   const [bookingId, setBookingId] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>
+  ) {
     event.preventDefault();
 
     try {
@@ -44,8 +54,10 @@ export default function BookingForm({
         origin: travelPackage.origin,
         destination: travelPackage.destination,
 
-        departureDate: travelPackage.departureDate,
-        returnDate: travelPackage.returnDate,
+        departureDate:
+          travelPackage.departureDate,
+        returnDate:
+          travelPackage.returnDate,
 
         fullName,
         email,
@@ -54,13 +66,35 @@ export default function BookingForm({
         notes,
       };
 
-      const response = await createBooking(booking);
+      const response =
+        await createBooking(booking);
 
-      setBookingId(response.booking?.id ?? "");
+      const createdBookingId =
+        response.booking?.id ?? "";
+
+      setBookingId(createdBookingId);
       setSuccess(true);
+
+      /*
+       * Informa al componente padre que la
+       * solicitud fue creada correctamente.
+       *
+       * Trip.tsx utilizará esta información
+       * para marcar el viaje como pendiente
+       * y evitar solicitudes duplicadas.
+       */
+      if (createdBookingId) {
+        onBookingSuccess?.({
+          bookingId: createdBookingId,
+          packageId: travelPackage.id,
+          status: "pending",
+        });
+      }
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "No se pudo enviar la solicitud",
+        err instanceof Error
+          ? err.message
+          : "No se pudo enviar la solicitud"
       );
     } finally {
       setSubmitting(false);
@@ -73,17 +107,23 @@ export default function BookingForm({
         <h4>Solicitud recibida</h4>
 
         <p>
-          Recibimos tu solicitud para <strong>{travelPackage.name}</strong>.
+          Recibimos tu solicitud para{" "}
+          <strong>
+            {travelPackage.name}
+          </strong>
+          .
         </p>
 
         {bookingId && (
           <p className="booking-reference">
-            Referencia: <strong>{bookingId}</strong>
+            Referencia:{" "}
+            <strong>{bookingId}</strong>
           </p>
         )}
 
         <p>
-          El equipo de JGTravel verificará disponibilidad y precio antes de
+          El equipo de JGTravel verificará
+          disponibilidad y precio antes de
           confirmar la reserva.
         </p>
 
@@ -99,66 +139,93 @@ export default function BookingForm({
   }
 
   return (
-    <form className="booking-form" onSubmit={handleSubmit}>
+    <form
+      className="booking-form"
+      onSubmit={handleSubmit}
+    >
       <h4>Solicitar reserva</h4>
 
       <p className="booking-package-name">
-        {travelPackage.name} · {travelPackage.currency}{" "}
-        {travelPackage.price.toLocaleString("es-AR")}
+        {travelPackage.name} ·{" "}
+        {travelPackage.currency}{" "}
+        {travelPackage.price.toLocaleString(
+          "es-AR"
+        )}
       </p>
 
       <label>
         Nombre y apellido
+
         <input
           type="text"
           value={fullName}
-          onChange={(event) => setFullName(event.target.value)}
+          onChange={(event) =>
+            setFullName(event.target.value)
+          }
           required
         />
       </label>
 
       <label>
         Email
+
         <input
           type="email"
           value={email}
-          onChange={(event) => setEmail(event.target.value)}
+          onChange={(event) =>
+            setEmail(event.target.value)
+          }
           required
         />
       </label>
 
       <label>
         Teléfono
+
         <input
           type="tel"
           value={phone}
-          onChange={(event) => setPhone(event.target.value)}
+          onChange={(event) =>
+            setPhone(event.target.value)
+          }
         />
       </label>
 
       <label>
         Viajeros
+
         <input
           type="number"
           min="1"
           max="20"
           value={travelers}
-          onChange={(event) => setTravelers(Number(event.target.value))}
+          onChange={(event) =>
+            setTravelers(
+              Number(event.target.value)
+            )
+          }
           required
         />
       </label>
 
       <label>
         Observaciones
+
         <textarea
           value={notes}
-          onChange={(event) => setNotes(event.target.value)}
+          onChange={(event) =>
+            setNotes(event.target.value)
+          }
           rows={3}
           placeholder="Equipaje, menores, necesidades especiales..."
         />
       </label>
 
-      {error && <p className="booking-error">{error}</p>}
+      {error && (
+        <p className="booking-error">
+          {error}
+        </p>
+      )}
 
       <div className="booking-form-actions">
         <button
@@ -175,7 +242,9 @@ export default function BookingForm({
           className="package-reserve-button"
           disabled={submitting}
         >
-          {submitting ? "Enviando..." : "Enviar solicitud"}
+          {submitting
+            ? "Enviando..."
+            : "Enviar solicitud"}
         </button>
       </div>
     </form>

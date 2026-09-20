@@ -252,3 +252,32 @@
   color: #cbd5e1;
   font-size: 0.85rem;
 }
+.navbar-trip-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.navbar-trip-link svg {
+  flex-shrink: 0;
+}
+
+.navbar-trip-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+
+  border-radius: 999px;
+
+  background: #ff6b4a;
+  color: #ffffff;
+
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+}

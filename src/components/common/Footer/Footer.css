@@ -1,21 +1,25 @@
 .jg-footer {
   width: 100%;
-  padding: 28px 20px;
-  background: #f7f4ee;
+  padding: 0;
+  margin: 0;
+
+  background: #02335e;
   color: #ffffff;
 }
 
 .jg-footer-container {
-  width: min(1480px, 100%);
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+
+  margin: 0;
   padding: 20px;
+
   overflow: hidden;
 
   background: #02335e;
-  border-radius: 28px;
 
-  box-shadow:
-    0 20px 60px rgba(2, 51, 94, 0.18);
+  border-radius: 0;
+  box-shadow: none;
 }
 
 
@@ -582,15 +586,14 @@
 
 @media (max-width: 720px) {
   .jg-footer {
-    padding: 14px;
+    padding: 0;
   }
 
   .jg-footer-container {
     padding: 12px;
 
-    border-radius: 20px;
+    border-radius: 0;
   }
-
   .footer-newsletter {
     display: flex;
     flex-direction: column;

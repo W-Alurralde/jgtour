@@ -1,17 +1,16 @@
 import { useState } from "react";
-
-import BookingForm from "./BookingForm";
+import { Check, Plus, Trash2 } from "lucide-react";
 
 import type { TravelPackage } from "@/features/packages/types/package.types";
+import { useTrip } from "@/features/trip/hooks/useTrip";
 
 interface PackageCardProps {
   travelPackage: TravelPackage;
 }
 
-export default function PackageCard({
-  travelPackage,
-}: PackageCardProps) {
+export default function PackageCard({ travelPackage }: PackageCardProps) {
   const {
+    id,
     name,
     origin,
     destination,
@@ -28,7 +27,10 @@ export default function PackageCard({
   } = travelPackage;
 
   const [showDetails, setShowDetails] = useState(false);
-  const [showBooking, setShowBooking] = useState(false);
+
+  const { addItem, removeItem, hasItem } = useTrip();
+
+  const isInTrip = hasItem(id, "package");
 
   const formatDate = (date: string) =>
     new Intl.DateTimeFormat("es-AR", {
@@ -37,6 +39,28 @@ export default function PackageCard({
       year: "numeric",
       timeZone: "UTC",
     }).format(new Date(date));
+
+  function handleTripToggle() {
+    if (isInTrip) {
+      removeItem(id, "package");
+      return;
+    }
+
+    addItem({
+      id,
+      type: "package",
+      title: name,
+      subtitle: `${origin} → ${destination}`,
+      price,
+      currency,
+      image,
+      provider: "JGTravel",
+
+      details: {
+        travelPackage,
+      },
+    });
+  }
 
   return (
     <article className="package-card">
@@ -49,9 +73,7 @@ export default function PackageCard({
           </div>
         )}
 
-        <span className="package-card-nights">
-          {nights} noches
-        </span>
+        <span className="package-card-nights">{nights} noches</span>
       </div>
 
       <div className="package-card-content">
@@ -65,8 +87,8 @@ export default function PackageCard({
 
         <div className="package-card-details">
           <p>
-            <strong>Fechas:</strong>{" "}
-            {formatDate(departureDate)} – {formatDate(returnDate)}
+            <strong>Fechas:</strong> {formatDate(departureDate)} –{" "}
+            {formatDate(returnDate)}
           </p>
 
           <p>
@@ -80,9 +102,7 @@ export default function PackageCard({
 
         <div className="package-card-footer">
           <div>
-            <span className="package-card-from">
-              Desde
-            </span>
+            <span className="package-card-from">Desde</span>
 
             <strong className="package-card-price">
               {currency} {price.toLocaleString("es-AR")}
@@ -92,15 +112,31 @@ export default function PackageCard({
           <button
             type="button"
             className="package-card-button"
-            onClick={() =>
-              setShowDetails((prev) => !prev)
-            }
+            onClick={() => setShowDetails((prev) => !prev)}
           >
-            {showDetails
-              ? "Ocultar detalle"
-              : "Ver paquete"}
+            {showDetails ? "Ocultar detalle" : "Ver paquete"}
           </button>
         </div>
+
+        {/* NUEVO: Mi Viaje */}
+        <button
+          type="button"
+          className={`package-trip-button ${isInTrip ? "is-added" : ""}`}
+          onClick={handleTripToggle}
+        >
+          {isInTrip ? (
+            <>
+              <Check size={18} />
+              Agregado a Mi Viaje
+              <Trash2 size={16} />
+            </>
+          ) : (
+            <>
+              <Plus size={18} />
+              Agregar a Mi Viaje
+            </>
+          )}
+        </button>
 
         {showDetails && (
           <div className="package-card-expanded">
@@ -144,22 +180,7 @@ export default function PackageCard({
                   Ver hotel
                 </a>
               )}
-
-              <button
-                type="button"
-                className="package-reserve-button"
-                onClick={() => setShowBooking(true)}
-              >
-                Solicitar reserva
-              </button>
             </div>
-
-            {showBooking && (
-              <BookingForm
-                travelPackage={travelPackage}
-                onClose={() => setShowBooking(false)}
-              />
-            )}
           </div>
         )}
 

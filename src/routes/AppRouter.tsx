@@ -1,92 +1,58 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import MainLayout from '../components/layout/MainLayout';
+import MainLayout from "../components/layout/MainLayout";
 
-import Home from '../pages/Home/Home';
-import Adventure from '../pages/Adventure/Adventure';
-import Heritage from '../pages/Heritage/Heritage';
-import Nature from '../pages/Nature/Nature';
-import Family from '../pages/Family/Family';
-import Business from '../pages/Business/Business';
-import Premium from '../pages/Premium/Premium';
-import Contact from '../pages/Contact/Contact';
+import Home from "../pages/Home/Home";
+import Adventure from "../pages/Adventure/Adventure";
+import Heritage from "../pages/Heritage/Heritage";
+import Nature from "../pages/Nature/Nature";
+import Family from "../pages/Family/Family";
+import Business from "../pages/Business/Business";
+import Premium from "../pages/Premium/Premium";
+import Contact from "../pages/Contact/Contact";
+import ScrollToTop from "../components/common/ScrollToTop";
+import Flights from "../pages/Flights/Flights";
 
-import Flights from '../pages/Flights/Flights';
-
-import NotFound from '../pages/NotFound/NotFound';
-
+import NotFound from "../pages/NotFound/NotFound";
+import Trip from "../pages/Trip/Trip";
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
-
+      <ScrollToTop />
       <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<Home />} />
 
-        <Route
-          path="/"
-          element={<MainLayout />}
-        >
+          <Route path="adventure" element={<Adventure />} />
 
-          <Route
-            index
-            element={<Home />}
-          />
+          <Route path="heritage" element={<Heritage />} />
 
-          <Route
-            path="adventure"
-            element={<Adventure />}
-          />
+          <Route path="nature" element={<Nature />} />
 
-          <Route
-            path="heritage"
-            element={<Heritage />}
-          />
+          <Route path="family" element={<Family />} />
 
-          <Route
-            path="nature"
-            element={<Nature />}
-          />
+          <Route path="business" element={<Business />} />
 
-          <Route
-            path="family"
-            element={<Family />}
-          />
+          <Route path="premium" element={<Premium />} />
 
-          <Route
-            path="business"
-            element={<Business />}
-          />
-
-          <Route
-            path="premium"
-            element={<Premium />}
-          />
-
-          <Route
-            path="contact"
-            element={<Contact />}
-          />
+          <Route path="contact" element={<Contact />} />
 
           {/* ========================= */}
           {/* VUELOS JGTRAVEL */}
           {/* ========================= */}
 
-          <Route
-            path="flights"
-            element={<Flights />}
-          />
+          <Route path="flights" element={<Flights />} />
+
+          <Route path="mi-viaje" element={<Trip />} />
+
+          <Route path="*" element={<NotFound />} />
 
           {/* ========================= */}
 
-          <Route
-            path="*"
-            element={<NotFound />}
-          />
-
+          <Route path="*" element={<NotFound />} />
         </Route>
-
       </Routes>
-
     </BrowserRouter>
   );
 }
