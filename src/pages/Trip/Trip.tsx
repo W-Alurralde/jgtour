@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import BookingForm from "@/features/packages/components/BookingForm";
+import CancellationModal from "@/features/packages/components/CancellationModal";
 import { getBookingById } from "@/features/packages/services/bookingService";
 import { useTrip } from "@/features/trip/hooks/useTrip";
 
@@ -23,6 +24,7 @@ export default function Trip() {
   const [bookingPackage, setBookingPackage] = useState<TravelPackage | null>(
     null,
   );
+  const [showCancellationModal, setShowCancellationModal] = useState(false);
 
   const {
     items,
@@ -270,10 +272,20 @@ export default function Trip() {
                 <code>{activeBooking.id}</code>
 
                 {activeBooking.status === "pending" && (
-                  <small>
-                    Recibimos tu solicitud. JGTravel verificará disponibilidad y
-                    precio antes de confirmar la reserva.
-                  </small>
+                  <>
+                    <small>
+                      Recibimos tu solicitud. JGTravel verificará disponibilidad
+                      y precio antes de confirmar la reserva.
+                    </small>
+
+                    <button
+                      type="button"
+                      className="trip-cancellation-button"
+                      onClick={() => setShowCancellationModal(true)}
+                    >
+                      Solicitar cancelación
+                    </button>
+                  </>
                 )}
 
                 {activeBooking.status === "confirmed" && (
@@ -362,6 +374,22 @@ export default function Trip() {
           }}
         />
       )}
+      {showCancellationModal &&
+        activeBooking &&
+        activeBooking.status === "pending" &&
+        packageItem && (
+          <CancellationModal
+            bookingId={activeBooking.id}
+            itemId={packageItem.id}
+            itemType={packageItem.type}
+            onClose={() => setShowCancellationModal(false)}
+            onSuccess={(cancellation) => {
+              console.log("Solicitud de cancelación registrada:", cancellation);
+
+              setShowCancellationModal(false);
+            }}
+          />
+        )}
     </main>
   );
 }

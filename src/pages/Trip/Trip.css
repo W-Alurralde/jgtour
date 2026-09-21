@@ -302,3 +302,42 @@
   color: rgba(255, 255, 255, 0.72);
   line-height: 1.4;
 }
+/* ======================================================
+   SOLICITAR CANCELACIÓN
+   ====================================================== */
+
+.trip-cancellation-button {
+  width: 100%;
+
+  margin-top: 16px;
+  padding: 12px 16px;
+
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 12px;
+
+  background: rgba(201, 71, 50, 0.16);
+  color: #ffffff;
+
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.trip-cancellation-button:hover {
+  background: #c94732;
+  border-color: #c94732;
+
+  transform: translateY(-1px);
+}
+
+.trip-cancellation-button:focus-visible {
+  outline: 3px solid rgba(255, 107, 74, 0.32);
+  outline-offset: 2px;
+}
