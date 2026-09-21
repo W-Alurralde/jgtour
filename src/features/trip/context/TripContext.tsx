@@ -11,6 +11,7 @@ import type {
   TripContextValue,
   TripItem,
   TripItemType,
+  UpdateTripBookingInput,
 } from "../types/trip.types";
 
 const STORAGE_KEY = "jgtravel-trip";
@@ -65,7 +66,8 @@ export function TripProvider({
 
   /*
    * Persistimos Mi Viaje cada vez
-   * que cambia la selección.
+   * que cambia la selección o el
+   * estado de una reserva.
    */
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -85,6 +87,9 @@ export function TripProvider({
     }
   }, [items]);
 
+  /*
+   * Agrega un servicio a Mi Viaje.
+   */
   function addItem(
     item: NewTripItem
   ) {
@@ -117,6 +122,9 @@ export function TripProvider({
     });
   }
 
+  /*
+   * Elimina un servicio de Mi Viaje.
+   */
   function removeItem(
     id: string,
     type: TripItemType
@@ -132,6 +140,10 @@ export function TripProvider({
     );
   }
 
+  /*
+   * Comprueba si un servicio ya está
+   * agregado a Mi Viaje.
+   */
   function hasItem(
     id: string,
     type: TripItemType
@@ -143,6 +155,41 @@ export function TripProvider({
     );
   }
 
+  /*
+   * Asocia o actualiza una reserva
+   * sobre un servicio existente.
+   *
+   * Ejemplo:
+   *
+   * SALTA001
+   *   booking.id = abc123
+   *   booking.status = pending
+   */
+  function updateBooking({
+    itemId,
+    itemType,
+    booking,
+  }: UpdateTripBookingInput) {
+    setItems((currentItems) =>
+      currentItems.map((item) => {
+        if (
+          item.id === itemId &&
+          item.type === itemType
+        ) {
+          return {
+            ...item,
+            booking,
+          };
+        }
+
+        return item;
+      })
+    );
+  }
+
+  /*
+   * Vacía completamente Mi Viaje.
+   */
   function clearTrip() {
     setItems([]);
   }
@@ -197,6 +244,9 @@ export function TripProvider({
 
   const itemCount = items.length;
 
+  /*
+   * API pública de Mi Viaje.
+   */
   const value =
     useMemo<TripContextValue>(
       () => ({
@@ -208,6 +258,7 @@ export function TripProvider({
         addItem,
         removeItem,
         hasItem,
+        updateBooking,
         clearTrip,
       }),
       [

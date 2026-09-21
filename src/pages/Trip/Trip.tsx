@@ -1,25 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowLeft,
   BriefcaseBusiness,
   CalendarDays,
+  CheckCircle2,
+  Clock3,
   MapPin,
   Trash2,
 } from "lucide-react";
 
 import BookingForm from "@/features/packages/components/BookingForm";
-
+import { getBookingById } from "@/features/packages/services/bookingService";
 import { useTrip } from "@/features/trip/hooks/useTrip";
 
 import type { TravelPackage } from "@/features/packages/types/package.types";
-import type { TripItem } from "@/features/trip/types/trip.types";
+import type { TripItem, TripBooking } from "@/features/trip/types/trip.types";
 
 import "./Trip.css";
 
 export default function Trip() {
-  const [bookingPackage, setBookingPackage] =
-    useState<TravelPackage | null>(null);
+  const [bookingPackage, setBookingPackage] = useState<TravelPackage | null>(
+    null,
+  );
 
   const {
     items,
@@ -27,21 +30,80 @@ export default function Trip() {
     total,
     currency,
     removeItem,
+    updateBooking,
     clearTrip,
   } = useTrip();
 
   /*
-   * Por ahora BookingForm trabaja con un paquete
-   * JGTravel individual.
+   * Por ahora BookingForm trabaja con
+   * un paquete JGTravel individual.
    */
-  const packageItems = items.filter(
-    (item) => item.type === "package"
-  );
+  const packageItems = items.filter((item) => item.type === "package");
+
+  const packageItem = packageItems.length === 1 ? packageItems[0] : null;
 
   const reservablePackage =
-    packageItems.length === 1
-      ? getTravelPackage(packageItems[0])
-      : null;
+    packageItem && !packageItem.booking ? getTravelPackage(packageItem) : null;
+
+  /*
+   * Si el paquete ya tiene una reserva,
+   * recuperamos su estado.
+   */
+  const activeBooking = packageItem?.booking ?? null;
+  /*
+   * Sincroniza el estado de la reserva
+   * con Google Sheets a través de Apps Script.
+   *
+   * localStorage mantiene la experiencia
+   * entre recargas, pero el backend es la
+   * fuente del estado actual.
+   */
+  useEffect(() => {
+    if (!packageItem || !packageItem.booking?.id) {
+      return;
+    }
+
+    let cancelled = false;
+
+    async function syncBookingStatus() {
+      try {
+        const remoteBooking = await getBookingById(packageItem.booking!.id);
+
+        if (cancelled) {
+          return;
+        }
+
+        /*
+         * Solo actualizamos el contexto
+         * cuando el backend realmente
+         * informa un cambio.
+         */
+        if (remoteBooking.status !== packageItem.booking!.status) {
+          updateBooking({
+            itemId: packageItem.id,
+            itemType: packageItem.type,
+
+            booking: {
+              ...packageItem.booking!,
+              status: remoteBooking.status,
+            },
+          });
+        }
+      } catch (error) {
+        /*
+         * Si temporalmente falla la API,
+         * conservamos el último estado local.
+         */
+        console.error("No se pudo sincronizar la reserva:", error);
+      }
+    }
+
+    void syncBookingStatus();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [packageItem, updateBooking]);
 
   /*
    * Estado vacío de Mi Viaje.
@@ -56,14 +118,11 @@ export default function Trip() {
             <h1>Tu viaje está vacío</h1>
 
             <p>
-              Explorá las propuestas de JGTravel y agregá
-              los servicios que quieras incluir en tu viaje.
+              Explorá las propuestas de JGTravel y agregá los servicios que
+              quieras incluir en tu viaje.
             </p>
 
-            <Link
-              to="/"
-              className="trip-primary-button"
-            >
+            <Link to="/" className="trip-primary-button">
               Seguir explorando
             </Link>
           </section>
@@ -77,23 +136,18 @@ export default function Trip() {
       <div className="trip-container">
         <header className="trip-header">
           <div>
-            <span className="trip-eyebrow">
-              JGTravel
-            </span>
+            <span className="trip-eyebrow">JGTravel</span>
 
             <h1>Mi Viaje</h1>
 
             <p>
-              Revisá los servicios seleccionados antes
-              de continuar con la reserva.
+              Revisá los servicios seleccionados antes de continuar con la
+              reserva.
             </p>
           </div>
 
           <span className="trip-item-count">
-            {itemCount}{" "}
-            {itemCount === 1
-              ? "servicio"
-              : "servicios"}
+            {itemCount} {itemCount === 1 ? "servicio" : "servicios"}
           </span>
         </header>
 
@@ -104,16 +158,10 @@ export default function Trip() {
 
           <section className="trip-items">
             {items.map((item) => (
-              <article
-                key={`${item.type}-${item.id}`}
-                className="trip-card"
-              >
+              <article key={`${item.type}-${item.id}`} className="trip-card">
                 {item.image && (
                   <div className="trip-card-image">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                    />
+                    <img src={item.image} alt={item.title} />
                   </div>
                 )}
 
@@ -135,41 +183,38 @@ export default function Trip() {
                       )}
                     </div>
 
-                    <button
-                      type="button"
-                      className="trip-remove-button"
-                      onClick={() =>
-                        removeItem(
-                          item.id,
-                          item.type
-                        )
-                      }
-                      aria-label={`Eliminar ${item.title}`}
-                      title="Eliminar de Mi Viaje"
-                    >
-                      <Trash2 size={18} />
-                    </button>
+                    {!item.booking && (
+                      <button
+                        type="button"
+                        className="trip-remove-button"
+                        onClick={() => removeItem(item.id, item.type)}
+                        aria-label={`Eliminar ${item.title}`}
+                        title="Eliminar de Mi Viaje"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    )}
                   </div>
 
                   {item.type === "package" && (
-                    <PackageDetails
-                      details={item.details}
-                    />
+                    <PackageDetails details={item.details} />
                   )}
 
-                  {typeof item.price === "number" &&
-                    item.currency && (
-                      <div className="trip-card-price">
-                        <span>Desde</span>
+                  {typeof item.price === "number" && item.currency && (
+                    <div className="trip-card-price">
+                      <span>Desde</span>
 
-                        <strong>
-                          {item.currency}{" "}
-                          {item.price.toLocaleString(
-                            "es-AR"
-                          )}
-                        </strong>
-                      </div>
-                    )}
+                      <strong>
+                        {item.currency} {item.price.toLocaleString("es-AR")}
+                      </strong>
+                    </div>
+                  )}
+
+                  {/* ========================= */}
+                  {/* ESTADO DE RESERVA */}
+                  {/* ========================= */}
+
+                  {item.booking && <BookingStatus booking={item.booking} />}
                 </div>
               </article>
             ))}
@@ -183,9 +228,7 @@ export default function Trip() {
             <h2>Resumen</h2>
 
             <div className="trip-summary-row">
-              <span>
-                Servicios seleccionados
-              </span>
+              <span>Servicios seleccionados</span>
 
               <strong>{itemCount}</strong>
             </div>
@@ -195,68 +238,97 @@ export default function Trip() {
                 <span>Total estimado</span>
 
                 <strong>
-                  {currency}{" "}
-                  {total.toLocaleString(
-                    "es-AR"
-                  )}
+                  {currency} {total.toLocaleString("es-AR")}
                 </strong>
 
                 <small>
-                  El importe final puede variar al
-                  confirmar disponibilidad y reserva.
+                  El importe final puede variar al confirmar disponibilidad y
+                  reserva.
                 </small>
               </div>
             ) : (
               <p className="trip-summary-currencies">
-                Tu viaje contiene servicios en
-                distintas monedas. Los importes se
-                muestran por separado.
+                Tu viaje contiene servicios en distintas monedas. Los importes
+                se muestran por separado.
               </p>
             )}
 
             {/* ========================= */}
-            {/* CONTINUAR RESERVA */}
+            {/* ESTADO / RESERVA */}
             {/* ========================= */}
 
-            <button
-              type="button"
-              className="trip-checkout-button"
-              disabled={!reservablePackage}
-              onClick={() => {
-                if (reservablePackage) {
-                  setBookingPackage(
-                    reservablePackage
-                  );
-                }
-              }}
-            >
-              Continuar con la reserva
-            </button>
+            {activeBooking ? (
+              <div className="trip-booking-status">
+                <div className="trip-booking-status-title">
+                  <Clock3 size={19} />
 
-            {!reservablePackage && (
-              <small className="trip-booking-notice">
-                La reserva directa está disponible
-                actualmente para un paquete JGTravel
-                por vez.
-              </small>
+                  <strong>{getBookingStatusLabel(activeBooking.status)}</strong>
+                </div>
+
+                <span>Referencia</span>
+
+                <code>{activeBooking.id}</code>
+
+                {activeBooking.status === "pending" && (
+                  <small>
+                    Recibimos tu solicitud. JGTravel verificará disponibilidad y
+                    precio antes de confirmar la reserva.
+                  </small>
+                )}
+
+                {activeBooking.status === "confirmed" && (
+                  <small>
+                    La reserva fue confirmada y está lista para continuar con el
+                    pago.
+                  </small>
+                )}
+
+                {activeBooking.status === "paid" && (
+                  <small>El pago fue registrado correctamente.</small>
+                )}
+
+                {activeBooking.status === "cancelled" && (
+                  <small>Esta reserva fue cancelada.</small>
+                )}
+              </div>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="trip-checkout-button"
+                  disabled={!reservablePackage}
+                  onClick={() => {
+                    if (reservablePackage) {
+                      setBookingPackage(reservablePackage);
+                    }
+                  }}
+                >
+                  Continuar con la reserva
+                </button>
+
+                {!reservablePackage && (
+                  <small className="trip-booking-notice">
+                    La reserva directa está disponible actualmente para un
+                    paquete JGTravel por vez.
+                  </small>
+                )}
+              </>
             )}
 
-            <Link
-              to="/"
-              className="trip-explore-link"
-            >
+            <Link to="/" className="trip-explore-link">
               <ArrowLeft size={16} />
-
               Seguir explorando
             </Link>
 
-            <button
-              type="button"
-              className="trip-clear-button"
-              onClick={clearTrip}
-            >
-              Vaciar Mi Viaje
-            </button>
+            {!activeBooking && (
+              <button
+                type="button"
+                className="trip-clear-button"
+                onClick={clearTrip}
+              >
+                Vaciar Mi Viaje
+              </button>
+            )}
           </aside>
         </div>
       </div>
@@ -265,12 +337,29 @@ export default function Trip() {
       {/* FORMULARIO DE RESERVA */}
       {/* ========================= */}
 
-      {bookingPackage && (
+      {bookingPackage && packageItem && (
         <BookingForm
           travelPackage={bookingPackage}
-          onClose={() =>
-            setBookingPackage(null)
-          }
+          onClose={() => setBookingPackage(null)}
+          onBookingSuccess={({ bookingId, status }) => {
+            updateBooking({
+              itemId: packageItem.id,
+              itemType: packageItem.type,
+
+              booking: {
+                id: bookingId,
+                status,
+                createdAt: new Date().toISOString(),
+              },
+            });
+
+            /*
+             * Cerramos el formulario después
+             * de registrar correctamente
+             * la reserva en Mi Viaje.
+             */
+            setBookingPackage(null);
+          }}
         />
       )}
     </main>
@@ -278,26 +367,17 @@ export default function Trip() {
 }
 
 /*
- * Recupera el TravelPackage original guardado
- * dentro del TripItem.
+ * Recupera el TravelPackage original
+ * guardado dentro del TripItem.
  */
-function getTravelPackage(
-  item: TripItem
-): TravelPackage | null {
-  if (
-    item.type !== "package" ||
-    !item.details
-  ) {
+function getTravelPackage(item: TripItem): TravelPackage | null {
+  if (item.type !== "package" || !item.details) {
     return null;
   }
 
-  const travelPackage =
-    item.details.travelPackage;
+  const travelPackage = item.details.travelPackage;
 
-  if (
-    !travelPackage ||
-    typeof travelPackage !== "object"
-  ) {
+  if (!travelPackage || typeof travelPackage !== "object") {
     return null;
   }
 
@@ -310,68 +390,77 @@ interface PackageDetailsProps {
 
 /*
  * Muestra los datos del paquete utilizando
- * el snapshot TravelPackage guardado en Mi Viaje.
+ * el snapshot TravelPackage guardado
+ * en Mi Viaje.
  */
-function PackageDetails({
-  details,
-}: PackageDetailsProps) {
+function PackageDetails({ details }: PackageDetailsProps) {
   if (!details) {
     return null;
   }
 
-  const travelPackage =
-    details.travelPackage;
+  const travelPackage = details.travelPackage;
 
-  if (
-    !travelPackage ||
-    typeof travelPackage !== "object"
-  ) {
+  if (!travelPackage || typeof travelPackage !== "object") {
     return null;
   }
 
-  const packageData =
-    travelPackage as TravelPackage;
+  const packageData = travelPackage as TravelPackage;
 
   return (
     <div className="trip-package-details">
       <p>
         <CalendarDays size={16} />
-
-        {formatDate(
-          packageData.departureDate
-        )}{" "}
-        –{" "}
-        {formatDate(
-          packageData.returnDate
-        )}
+        {formatDate(packageData.departureDate)} –{" "}
+        {formatDate(packageData.returnDate)}
       </p>
+
+      <p>{packageData.nights} noches</p>
 
       <p>
-        {packageData.nights} noches
+        {packageData.hotel} · {packageData.hotelCategory}★
       </p>
 
-      <p>
-        {packageData.hotel} ·{" "}
-        {packageData.hotelCategory}★
-      </p>
-
-      <p>
-        {packageData.experience}
-      </p>
+      <p>{packageData.experience}</p>
     </div>
   );
 }
 
+/*
+ * Estado de reserva mostrado dentro
+ * de la tarjeta del servicio.
+ */
+function BookingStatus({ booking }: { booking: TripBooking }) {
+  return (
+    <div className="trip-card-booking">
+      <CheckCircle2 size={18} />
+
+      <div>
+        <strong>{getBookingStatusLabel(booking.status)}</strong>
+
+        <span>Ref. {booking.id}</span>
+      </div>
+    </div>
+  );
+}
+
+function getBookingStatusLabel(status: TripBooking["status"]) {
+  const labels: Record<TripBooking["status"], string> = {
+    pending: "Solicitud pendiente",
+    confirmed: "Reserva confirmada",
+    paid: "Pago acreditado",
+    cancelled: "Reserva cancelada",
+  };
+
+  return labels[status];
+}
+
 function formatDate(date: string) {
-  return new Intl.DateTimeFormat(
-    "es-AR",
-    {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      timeZone: "UTC",
-    }
-  ).format(new Date(date));
+  return new Intl.DateTimeFormat("es-AR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(date));
 }
 
 function getTypeLabel(type: string) {
