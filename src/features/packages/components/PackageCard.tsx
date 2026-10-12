@@ -1,14 +1,23 @@
-import { useState } from "react";
-import { Check, Plus, Trash2 } from "lucide-react";
+
+import { useContext, useState } from "react";
+import {
+  Check,
+  Plus,
+  Trash2,
+  LoaderCircle,
+} from "lucide-react";
 
 import type { TravelPackage } from "@/features/packages/types/package.types";
 import { useTrip } from "@/features/trip/hooks/useTrip";
+import { AuthContext } from "@/contexts/AuthContext";
 
 interface PackageCardProps {
   travelPackage: TravelPackage;
 }
 
-export default function PackageCard({ travelPackage }: PackageCardProps) {
+export default function PackageCard({
+  travelPackage,
+}: PackageCardProps) {
   const {
     id,
     name,
@@ -26,11 +35,40 @@ export default function PackageCard({ travelPackage }: PackageCardProps) {
     updatedAt,
   } = travelPackage;
 
-  const [showDetails, setShowDetails] = useState(false);
+  const [showDetails, setShowDetails] =
+    useState(false);
 
-  const { addItem, removeItem, hasItem } = useTrip();
+  const [authenticating, setAuthenticating] =
+    useState(false);
+
+  const [authError, setAuthError] =
+    useState<string | null>(null);
+
+  const auth = useContext(AuthContext);
+
+  if (!auth) {
+    throw new Error(
+      "PackageCard debe estar dentro de AuthProvider."
+    );
+  }
+
+  const {
+    user,
+    loading: authLoading,
+    loginWithGoogle,
+  } = auth;
+
+  const {
+    addItem,
+    removeItem,
+    hasItem,
+    loading: tripLoading,
+  } = useTrip();
 
   const isInTrip = hasItem(id, "package");
+
+  const isLoading =
+    authLoading || authenticating || (Boolean(user) && tripLoading);
 
   const formatDate = (date: string) =>
     new Intl.DateTimeFormat("es-AR", {
@@ -40,12 +78,7 @@ export default function PackageCard({ travelPackage }: PackageCardProps) {
       timeZone: "UTC",
     }).format(new Date(date));
 
-  function handleTripToggle() {
-    if (isInTrip) {
-      removeItem(id, "package");
-      return;
-    }
-
+  function addPackageToTrip() {
     addItem({
       id,
       type: "package",
@@ -55,11 +88,65 @@ export default function PackageCard({ travelPackage }: PackageCardProps) {
       currency,
       image,
       provider: "JGTravel",
-
       details: {
         travelPackage,
       },
     });
+  }
+
+  async function handleTripToggle() {
+    setAuthError(null);
+
+    if (isLoading) {
+      return;
+    }
+
+    if (!user) {
+      setAuthenticating(true);
+
+      try {
+        await loginWithGoogle();
+
+        // El carrito debe terminar de cargar
+        // para el usuario recién autenticado.
+        // No agregamos el paquete todavía.
+        // El visitante puede pulsar nuevamente
+        // el botón una vez iniciada la sesión.
+      } catch (error: unknown) {
+        const errorCode =
+          error !== null &&
+          typeof error === "object" &&
+          "code" in error
+            ? String(error.code)
+            : "";
+
+        if (
+          errorCode !==
+          "auth/popup-closed-by-user" &&
+          errorCode !==
+          "auth/cancelled-popup-request"
+        ) {
+          setAuthError(
+            "No se pudo iniciar sesión con Google. Intentá nuevamente."
+          );
+          console.error(
+            "Error de autenticación:",
+            error
+          );
+        }
+      } finally {
+        setAuthenticating(false);
+      }
+
+      return;
+    }
+
+    if (isInTrip) {
+      removeItem(id, "package");
+      return;
+    }
+
+    addPackageToTrip();
   }
 
   return (
@@ -73,7 +160,9 @@ export default function PackageCard({ travelPackage }: PackageCardProps) {
           </div>
         )}
 
-        <span className="package-card-nights">{nights} noches</span>
+        <span className="package-card-nights">
+          {nights} noches
+        </span>
       </div>
 
       <div className="package-card-content">
@@ -87,44 +176,64 @@ export default function PackageCard({ travelPackage }: PackageCardProps) {
 
         <div className="package-card-details">
           <p>
-            <strong>Fechas:</strong> {formatDate(departureDate)} –{" "}
+            <strong>Fechas:</strong>{" "}
+            {formatDate(departureDate)} –{" "}
             {formatDate(returnDate)}
           </p>
 
           <p>
-            <strong>Hotel:</strong> {hotel} · {hotelCategory}★
+            <strong>Hotel:</strong>{" "}
+            {hotel} · {hotelCategory}★
           </p>
 
           <p>
-            <strong>Experiencia:</strong> {experience}
+            <strong>Experiencia:</strong>{" "}
+            {experience}
           </p>
         </div>
 
         <div className="package-card-footer">
           <div>
-            <span className="package-card-from">Desde</span>
+            <span className="package-card-from">
+              Desde
+            </span>
 
             <strong className="package-card-price">
-              {currency} {price.toLocaleString("es-AR")}
+              {currency}{" "}
+              {price.toLocaleString("es-AR")}
             </strong>
           </div>
 
           <button
             type="button"
             className="package-card-button"
-            onClick={() => setShowDetails((prev) => !prev)}
+            onClick={() =>
+              setShowDetails((prev) => !prev)
+            }
           >
-            {showDetails ? "Ocultar detalle" : "Ver paquete"}
+            {showDetails
+              ? "Ocultar detalle"
+              : "Ver paquete"}
           </button>
         </div>
 
-        {/* NUEVO: Mi Viaje */}
         <button
           type="button"
-          className={`package-trip-button ${isInTrip ? "is-added" : ""}`}
-          onClick={handleTripToggle}
+          className={`package-trip-button ${
+            isInTrip ? "is-added" : ""
+          }`}
+          onClick={() => {
+            void handleTripToggle();
+          }}
+          disabled={isLoading}
+          aria-busy={isLoading}
         >
-          {isInTrip ? (
+          {isLoading ? (
+            <>
+              <LoaderCircle size={18} />
+              Cargando Mi Viaje...
+            </>
+          ) : isInTrip ? (
             <>
               <Check size={18} />
               Agregado a Mi Viaje
@@ -138,13 +247,20 @@ export default function PackageCard({ travelPackage }: PackageCardProps) {
           )}
         </button>
 
+        {authError && (
+          <p role="alert" className="package-card-error">
+            {authError}
+          </p>
+        )}
+
         {showDetails && (
           <div className="package-card-expanded">
             <h4>Incluido en este paquete</h4>
 
             <ul>
               <li>
-                Alojamiento en {hotel} · {hotelCategory}★
+                Alojamiento en {hotel} ·{" "}
+                {hotelCategory}★
               </li>
 
               <li>
@@ -154,7 +270,8 @@ export default function PackageCard({ travelPackage }: PackageCardProps) {
               <li>{experience}</li>
 
               <li>
-                Viaje desde {origin} hacia {destination}
+                Viaje desde {origin} hacia{" "}
+                {destination}
               </li>
             </ul>
 

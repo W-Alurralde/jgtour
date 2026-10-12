@@ -1,6 +1,10 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { BriefcaseBusiness } from "lucide-react";
+import {
+  BriefcaseBusiness,
+  Menu,
+} from "lucide-react";
 
 import { useAuth } from "@/hooks/useAuth";
 import { useTrip } from "@/features/trip/hooks/useTrip";
@@ -14,8 +18,16 @@ import "./Navbar.css";
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
-  const { user, loginWithGoogle, logout } = useAuth();
-  const { itemCount } = useTrip();
+  const {
+    user,
+    loginWithGoogle,
+    logout,
+  } = useAuth();
+
+  const {
+    itemCount,
+    loading: tripLoading,
+  } = useTrip();
 
   const handleLogin = async () => {
     try {
@@ -32,7 +44,12 @@ export default function Navbar() {
     <>
       <header className="navbar">
         <div className="navbar-container">
-          <Link to="/" className="navbar-brand">
+
+          {/* LOGOTIPO */}
+          <Link
+            to="/"
+            className="navbar-brand"
+          >
             <img
               src="/logo-jgtravel.png"
               alt="JGTravel"
@@ -40,7 +57,7 @@ export default function Navbar() {
             />
           </Link>
 
-          {/* DESKTOP */}
+          {/* NAVEGACIÓN DESKTOP */}
           <nav className="navbar-menu desktop-only">
             <Link to="/">Inicio</Link>
             <Link to="/adventure">Aventura</Link>
@@ -54,11 +71,14 @@ export default function Navbar() {
               to="/mi-viaje"
               className="navbar-trip-link"
             >
-              <BriefcaseBusiness size={18} />
+              <BriefcaseBusiness
+                size={18}
+                aria-hidden="true"
+              />
 
               <span>Mi Viaje</span>
 
-              {itemCount > 0 && (
+              {!tripLoading && itemCount > 0 && (
                 <span className="navbar-trip-count">
                   {itemCount}
                 </span>
@@ -66,11 +86,12 @@ export default function Navbar() {
             </Link>
           </nav>
 
-          {/* DERECHA */}
+          {/* SECCIÓN DERECHA */}
           <div className="navbar-right">
+
             <WeatherCompact />
 
-            {/* Desktop usuario */}
+            {/* USUARIO DESKTOP */}
             <div className="desktop-only navbar-user">
               {user ? (
                 <>
@@ -85,7 +106,9 @@ export default function Navbar() {
                     />
                   )}
 
-                  <span>{user.displayName}</span>
+                  <span>
+                    {user.displayName}
+                  </span>
 
                   <Button
                     variant="outline"
@@ -104,19 +127,48 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* Mobile hamburguesa */}
+            {/* CARRITO MÓVIL */}
+            <Link
+              to="/mi-viaje"
+              className="navbar-mobile-trip mobile-only"
+              aria-label={
+                tripLoading
+                  ? "Mi Viaje, cargando"
+                  : `Mi Viaje, ${itemCount} servicios`
+              }
+              title="Mi Viaje"
+            >
+              <BriefcaseBusiness
+                size={23}
+                aria-hidden="true"
+              />
+
+              {!tripLoading && itemCount > 0 && (
+                <span className="navbar-mobile-trip-count">
+                  {itemCount}
+                </span>
+              )}
+            </Link>
+
+            {/* MENÚ HAMBURGUESA MÓVIL */}
             <button
+              type="button"
               className="navbar-toggle mobile-only"
               onClick={() => setOpen(true)}
               aria-label="Abrir menú"
+              aria-expanded={open}
             >
-              ☰
+              <Menu
+                size={25}
+                aria-hidden="true"
+              />
             </button>
+
           </div>
         </div>
       </header>
 
-      {/* Drawer solo mobile */}
+      {/* DRAWER MÓVIL */}
       <MobileDrawer
         open={open}
         onClose={() => setOpen(false)}

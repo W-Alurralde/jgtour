@@ -1,10 +1,21 @@
+
 import {
   createContext,
+  useContext,
   useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
+
+import { AuthContext } from "../../../contexts/AuthContext";
+
+import {
+  addTripItem,
+  clearStoredTrip,
+  removeTripItem,
+  subscribeToTrip,
+} from "../services/tripFirestoreService";
 
 import type {
   NewTripItem,
@@ -12,9 +23,8 @@ import type {
   TripItem,
   TripItemType,
   UpdateTripBookingInput,
+  TripBooking,
 } from "../types/trip.types";
-
-const STORAGE_KEY = "jgtravel-trip";
 
 export const TripContext =
   createContext<TripContextValue | undefined>(
@@ -25,125 +35,214 @@ interface TripProviderProps {
   children: ReactNode;
 }
 
-function loadStoredTrip(): TripItem[] {
-  if (typeof window === "undefined") {
-    return [];
-  }
+const LEGACY_STORAGE_KEY = "jgtravel-trip";
 
+function bookingStorageKey(uid: string) {
+  return `jgtravel-bookings-${uid}`;
+}
+
+type BookingReferences = Record<
+  string,
+  TripBooking
+>;
+
+function itemKey(
+  id: string,
+  type: TripItemType
+) {
+  return JSON.stringify([type, id]);
+}
+
+function loadBookingReferences(
+  uid: string
+): BookingReferences {
   try {
-    const stored =
-      window.localStorage.getItem(
-        STORAGE_KEY
-      );
-
-    if (!stored) {
-      return [];
-    }
-
-    const parsed: unknown =
-      JSON.parse(stored);
-
-    if (!Array.isArray(parsed)) {
-      return [];
-    }
-
-    return parsed as TripItem[];
-  } catch (error) {
-    console.error(
-      "No se pudo recuperar Mi Viaje:",
-      error
+    const stored = localStorage.getItem(
+      bookingStorageKey(uid)
     );
 
-    return [];
+    if (!stored) return {};
+
+    const parsed: unknown = JSON.parse(stored);
+
+    if (
+      parsed === null ||
+      typeof parsed !== "object" ||
+      Array.isArray(parsed)
+    ) {
+      return {};
+    }
+
+    return parsed as BookingReferences;
+  } catch {
+    return {};
   }
 }
 
 export function TripProvider({
   children,
 }: TripProviderProps) {
-  const [items, setItems] =
-    useState<TripItem[]>(loadStoredTrip);
+  const auth = useContext(AuthContext);
+
+  if (!auth) {
+    throw new Error(
+      "TripProvider debe estar dentro de AuthProvider."
+    );
+  }
+
+  const { user, loading: authLoading } = auth;
+
+  const uid = user?.uid ?? null;
+
+  const [remoteItems, setRemoteItems] =
+    useState<TripItem[]>([]);
+
+  const [activeUid, setActiveUid] =
+    useState<string | null>(null);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] =
+    useState<string | null>(null);
+
+  const [bookingReferences, setBookingReferences] =
+    useState<BookingReferences>({});
 
   /*
-   * Persistimos Mi Viaje cada vez
-   * que cambia la selección o el
-   * estado de una reserva.
+   * Cada sesión utiliza su propio carrito.
+   * No recuperamos automáticamente el carrito
+   * antiguo porque no estaba asociado a un UID.
    */
   useEffect(() => {
-    if (typeof window === "undefined") {
+    setRemoteItems([]);
+    setActiveUid(null);
+    setBookingReferences({});
+    setError(null);
+
+    if (authLoading) {
+      setLoading(true);
       return;
     }
 
-    try {
-      window.localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(items)
-      );
-    } catch (error) {
-      console.error(
-        "No se pudo guardar Mi Viaje:",
-        error
-      );
+    if (!uid) {
+      setLoading(false);
+      return;
     }
-  }, [items]);
+
+    setLoading(true);
+    setBookingReferences(
+      loadBookingReferences(uid)
+    );
+
+    const unsubscribe = subscribeToTrip(
+      uid,
+      (items) => {
+        setRemoteItems(items);
+        setActiveUid(uid);
+        setLoading(false);
+      },
+      (snapshotError) => {
+        setError(snapshotError.message);
+        setLoading(false);
+      }
+    );
+
+    return () => {
+      unsubscribe();
+    };
+  }, [uid, authLoading]);
 
   /*
-   * Agrega un servicio a Mi Viaje.
+   * Fusionamos servicios de Firestore
+   * con referencias locales de reservas.
    */
-  function addItem(
-    item: NewTripItem
-  ) {
-    setItems((currentItems) => {
-      /*
-       * No permitimos agregar dos veces
-       * el mismo producto del mismo tipo.
-       */
-      const alreadyExists =
-        currentItems.some(
-          (currentItem) =>
-            currentItem.id === item.id &&
-            currentItem.type === item.type
-        );
+  const items = useMemo(() => {
+    if (!uid || activeUid !== uid) {
+      return [];
+    }
 
-      if (alreadyExists) {
-        return currentItems;
-      }
-
-      const newItem: TripItem = {
-        ...item,
-        addedAt:
-          new Date().toISOString(),
-      };
-
-      return [
-        ...currentItems,
-        newItem,
+    return remoteItems.map((item) => {
+      const booking = bookingReferences[
+        itemKey(item.id, item.type)
       ];
+
+      return booking
+        ? { ...item, booking }
+        : item;
     });
+  }, [
+    remoteItems,
+    bookingReferences,
+    uid,
+    activeUid,
+  ]);
+
+  function ensureReady(): string | null {
+    if (!uid) {
+      setError(
+        "Iniciá sesión para agregar servicios a Mi Viaje."
+      );
+      return null;
+    }
+
+    if (loading || activeUid !== uid) {
+      setError(
+        "Esperá a que termine de cargar Mi Viaje."
+      );
+      return null;
+    }
+
+    return uid;
   }
 
   /*
-   * Elimina un servicio de Mi Viaje.
+   * Guarda un servicio en Firestore.
+   */
+  function addItem(item: NewTripItem) {
+    const currentUid = ensureReady();
+
+    if (!currentUid) return;
+
+    setError(null);
+
+    void addTripItem(currentUid, item).catch(
+      (operationError: unknown) => {
+        setError(
+          operationError instanceof Error
+            ? operationError.message
+            : "No se pudo agregar el servicio."
+        );
+      }
+    );
+  }
+
+  /*
+   * Elimina un servicio en Firestore.
    */
   function removeItem(
     id: string,
     type: TripItemType
   ) {
-    setItems((currentItems) =>
-      currentItems.filter(
-        (item) =>
-          !(
-            item.id === id &&
-            item.type === type
-          )
-      )
-    );
+    const currentUid = ensureReady();
+
+    if (!currentUid) return;
+
+    setError(null);
+
+    void removeTripItem(
+      currentUid,
+      id,
+      type
+    ).catch((operationError: unknown) => {
+      setError(
+        operationError instanceof Error
+          ? operationError.message
+          : "No se pudo eliminar el servicio."
+      );
+    });
   }
 
-  /*
-   * Comprueba si un servicio ya está
-   * agregado a Mi Viaje.
-   */
   function hasItem(
     id: string,
     type: TripItemType
@@ -156,80 +255,78 @@ export function TripProvider({
   }
 
   /*
-   * Asocia o actualiza una reserva
-   * sobre un servicio existente.
+   * Conserva temporalmente la referencia
+   * de la reserva por usuario.
    *
-   * Ejemplo:
-   *
-   * SALTA001
-   *   booking.id = abc123
-   *   booking.status = pending
+   * El estado no es una fuente confiable:
+   * debe verificarse con el backend.
    */
   function updateBooking({
     itemId,
     itemType,
     booking,
   }: UpdateTripBookingInput) {
-    setItems((currentItems) =>
-      currentItems.map((item) => {
-        if (
-          item.id === itemId &&
-          item.type === itemType
-        ) {
-          return {
-            ...item,
-            booking,
-          };
-        }
+    if (!uid) return;
 
-        return item;
-      })
+    const next = {
+      ...loadBookingReferences(uid),
+      [itemKey(itemId, itemType)]: booking,
+    };
+
+    try {
+      localStorage.setItem(
+        bookingStorageKey(uid),
+        JSON.stringify(next)
+      );
+
+      setBookingReferences(next);
+    } catch {
+      setError(
+        "No se pudo guardar la referencia de la reserva."
+      );
+    }
+  }
+
+  /*
+   * Vacía el carrito remoto.
+   */
+  function clearTrip() {
+    const currentUid = ensureReady();
+
+    if (!currentUid) return;
+
+    setError(null);
+
+    void clearStoredTrip(currentUid).catch(
+      (operationError: unknown) => {
+        setError(
+          operationError instanceof Error
+            ? operationError.message
+            : "No se pudo vaciar Mi Viaje."
+        );
+      }
     );
   }
 
-  /*
-   * Vacía completamente Mi Viaje.
-   */
-  function clearTrip() {
-    setItems([]);
-  }
-
-  /*
-   * Detectamos las monedas presentes
-   * en Mi Viaje.
-   */
   const currencies = useMemo(
-    () =>
-      [
-        ...new Set(
-          items
-            .map((item) =>
-              item.currency
-            )
-            .filter(
-              (
-                currency
-              ): currency is string =>
-                Boolean(currency)
-            )
-        ),
-      ],
+    () => [
+      ...new Set(
+        items
+          .map((item) => item.currency)
+          .filter(
+            (currency): currency is string =>
+              Boolean(currency)
+          )
+      ),
+    ],
     [items]
   );
 
-  /*
-   * Sólo definimos una moneda general
-   * cuando todos los precios utilizan
-   * la misma moneda.
-   */
   const currency =
     currencies.length === 1
       ? currencies[0]
       : null;
 
-  /*
-   * Nunca sumamos monedas diferentes.
-   */
   const total = useMemo(() => {
     if (currencies.length !== 1) {
       return 0;
@@ -244,35 +341,32 @@ export function TripProvider({
 
   const itemCount = items.length;
 
-  /*
-   * API pública de Mi Viaje.
-   */
-  const value =
-    useMemo<TripContextValue>(
-      () => ({
-        items,
-        itemCount,
-        total,
-        currency,
-
-        addItem,
-        removeItem,
-        hasItem,
-        updateBooking,
-        clearTrip,
-      }),
-      [
-        items,
-        itemCount,
-        total,
-        currency,
-      ]
-    );
+  const value = useMemo<TripContextValue>(
+    () => ({
+      items,
+      itemCount,
+      total,
+      currency,
+      loading,
+      error,
+      addItem,
+      removeItem,
+      hasItem,
+      updateBooking,
+      clearTrip,
+    }),
+    [
+      items,
+      itemCount,
+      total,
+      currency,
+      loading,
+      error,
+    ]
+  );
 
   return (
-    <TripContext.Provider
-      value={value}
-    >
+    <TripContext.Provider value={value}>
       {children}
     </TripContext.Provider>
   );

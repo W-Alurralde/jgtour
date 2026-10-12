@@ -24,11 +24,7 @@ export type TripItemType =
  * cancelled:
  *   reserva cancelada.
  */
-export type BookingStatus =
-  | "pending"
-  | "confirmed"
-  | "paid"
-  | "cancelled";
+export type BookingStatus = "pending" | "confirmed" | "paid" | "cancelled";
 
 /*
  * Información de la reserva asociada
@@ -77,8 +73,7 @@ export interface TripItem {
  * addedAt se genera automáticamente
  * dentro de TripContext.
  */
-export type NewTripItem =
-  Omit<TripItem, "addedAt">;
+export type NewTripItem = Omit<TripItem, "addedAt">;
 
 /*
  * Datos necesarios para asociar una
@@ -101,28 +96,21 @@ export interface TripContextValue {
   total: number;
 
   currency: string | null;
+  loading: boolean;
 
-  addItem: (
-    item: NewTripItem
-  ) => void;
+  error: string | null;
 
-  removeItem: (
-    id: string,
-    type: TripItemType
-  ) => void;
+  addItem: (item: NewTripItem) => void;
 
-  hasItem: (
-    id: string,
-    type: TripItemType
-  ) => boolean;
+  removeItem: (id: string, type: TripItemType) => void;
+
+  hasItem: (id: string, type: TripItemType) => boolean;
 
   /*
    * Actualiza el estado de reserva
    * de un elemento existente.
    */
-  updateBooking: (
-    input: UpdateTripBookingInput
-  ) => void;
+  updateBooking: (input: UpdateTripBookingInput) => void;
 
   clearTrip: () => void;
 }

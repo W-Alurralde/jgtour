@@ -281,3 +281,95 @@
   font-weight: 700;
   line-height: 1;
 }
+
+/* ==========================================
+   JGTRAVEL - MI VIAJE MOBILE
+   ========================================== */
+
+.navbar-mobile-trip {
+  position: relative;
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+
+  border-radius: 12px;
+  background: #eff6ff;
+  color: #0057b8;
+
+  text-decoration: none;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.navbar-mobile-trip:hover {
+  background: #dbeafe;
+  transform: translateY(-1px);
+}
+
+.navbar-mobile-trip:focus-visible {
+  outline: 2px solid #00b8d9;
+  outline-offset: 3px;
+}
+
+/* Contador de servicios */
+.navbar-mobile-trip-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+
+  border: 2px solid #ffffff;
+  border-radius: 999px;
+
+  background: #ff6b4a;
+  color: #ffffff;
+
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Tablets y celulares */
+@media (max-width: 991px) {
+  .navbar-mobile-trip {
+    display: flex;
+  }
+}
+
+/* Celulares pequeños */
+@media (max-width: 480px) {
+  .navbar-container {
+    padding: 0.65rem 0.75rem;
+  }
+
+  .navbar-logo {
+    height: 36px;
+  }
+
+  .navbar-right {
+    gap: 0.35rem;
+  }
+
+  .navbar-mobile-trip {
+    width: 42px;
+    height: 42px;
+  }
+
+  .navbar-toggle {
+    width: 42px;
+    height: 42px;
+  }
+}
