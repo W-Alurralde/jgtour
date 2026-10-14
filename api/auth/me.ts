@@ -4,8 +4,6 @@ import type {
   VercelResponse,
 } from "@vercel/node";
 
-import { getFirebaseAdminAuth } from "../_lib/firebaseAdmin.js";
-
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse
@@ -41,6 +39,11 @@ export default async function handler(
   }
 
   try {
+    // Cargar Firebase Admin solamente cuando exista un token.
+    const { getFirebaseAdminAuth } = await import(
+      "../_lib/firebaseAdmin.js"
+    );
+
     const decodedToken =
       await getFirebaseAdminAuth().verifyIdToken(token);
 
@@ -49,11 +52,15 @@ export default async function handler(
       user: {
         uid: decodedToken.uid,
         email: decodedToken.email ?? null,
-        emailVerified: decodedToken.email_verified ?? false,
+        emailVerified:
+          decodedToken.email_verified ?? false,
       },
     });
   } catch (error) {
-    console.error("Error verificando autenticacion:", error);
+    console.error(
+      "Error verificando autenticacion:",
+      error
+    );
 
     return res.status(401).json({
       success: false,
