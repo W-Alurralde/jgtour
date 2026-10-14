@@ -12,7 +12,7 @@ import Premium from "../pages/Premium/Premium";
 import Contact from "../pages/Contact/Contact";
 import ScrollToTop from "../components/common/ScrollToTop";
 import Flights from "../pages/Flights/Flights";
-
+import AuthTest from "../pages/AuthTest";
 import NotFound from "../pages/NotFound/NotFound";
 import Trip from "../pages/Trip/Trip";
 
@@ -37,6 +37,8 @@ export default function AppRouter() {
           <Route path="premium" element={<Premium />} />
 
           <Route path="contact" element={<Contact />} />
+
+          <Route path="/auth-test" element={<AuthTest />} />
 
           {/* ========================= */}
           {/* VUELOS JGTRAVEL */}
