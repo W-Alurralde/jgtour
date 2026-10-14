@@ -1,7 +1,6 @@
 import { useState } from "react";
 import type {
   FlightSearchState,
-  TripType,
   CabinClass,
 } from "../types/flightSearch.types";
 
@@ -24,24 +23,28 @@ export default function FlightLinearForm() {
     departureDate: "2026-08-05",
     returnDate: "2026-08-15",
     passengers: {
-      adults: 2,
-      children: 1,
+      adults: 1,
+      children: 0,
       infants: 0,
+      pets: 0,
     },
     cabinClass: "economy",
+    assistance: {
+      needed: false,
+    },
     voucher: "",
   });
 
   const updateField = <K extends keyof FlightSearchState>(
     key: K,
-    value: FlightSearchState[K]
+    value: FlightSearchState[K],
   ) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
   const updatePassengers = (
     key: keyof FlightSearchState["passengers"],
-    value: number
+    value: number,
   ) => {
     setForm((prev) => ({
       ...prev,
@@ -95,7 +98,9 @@ export default function FlightLinearForm() {
             <label>Origen</label>
             <input
               value={form.origin}
-              onChange={(e) => updateField("origin", e.target.value.toUpperCase())}
+              onChange={(e) =>
+                updateField("origin", e.target.value.toUpperCase())
+              }
               placeholder="SLA"
             />
           </div>

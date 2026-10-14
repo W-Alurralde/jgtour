@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 
 import type { FormEvent } from "react";
 
-import type { FlightRequest } from "../../types/flight";
+import type { Flight, FlightRequest } from "../../types/flight";
 
 import { createFlightRequest } from "../../api/flights";
 
@@ -12,53 +12,20 @@ import "./FlightRequestModal.css";
 // TIPO DE VUELO
 // =========================================
 
-interface Flight {
-  id: string;
-
-  airline: string;
-  airline_name?: string;
-
-  flight_number: number;
-
-  origin: string;
-  destination: string;
-
-  departure_date: string;
-  departure_time: string;
-
-  arrival_date?: string;
-  arrival_time: string;
-
-  duration: string;
-
-  stops: number;
-
-  fare_family: string;
-
-  price: number;
-  currency: string;
-}
-
 // =========================================
 // PROPS
 // =========================================
 
 interface FlightRequestModalProps {
   flight: Flight;
-
   adults: number;
   children: number;
   infants: number;
   pets: number;
-
   cabinClass: string;
-
   needsAssistance: boolean;
-
   assistanceType: string;
-
   voucher?: string;
-
   onClose: () => void;
 }
 
@@ -176,10 +143,8 @@ export default function FlightRequestModal({
 
   const formattedPrice = new Intl.NumberFormat("es-AR", {
     style: "currency",
-
     currency: flight.currency,
-  }).format(flight.price);
-
+  }).format(flight.price ?? flight.reference_price);
   // =========================================
   // GENERAR NOTAS AUTOMÁTICAS
   // =========================================
@@ -517,21 +482,23 @@ export default function FlightRequestModal({
           </div>
 
           <div className="flight-modal__summary-route">
-            <span>{flight.duration}</span>
+            <span>{flight.duration ?? "Por confirmar"}</span>
 
             <div />
 
             <small>
-              {flight.stops === 0
-                ? "Directo"
-                : `${flight.stops} escala${flight.stops !== 1 ? "s" : ""}`}
+              {flight.stops === undefined
+                ? "Escalas por confirmar"
+                : flight.stops === 0
+                  ? "Directo"
+                  : `${flight.stops} escala${flight.stops !== 1 ? "s" : ""}`}
             </small>
           </div>
 
           <div>
             <span>Llegada</span>
 
-            <strong>{flight.arrival_time}</strong>
+            <strong>{flight.arrival_time ?? "--:--"}</strong>
 
             <small>{flight.arrival_date || "—"}</small>
           </div>

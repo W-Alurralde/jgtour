@@ -65,37 +65,31 @@ export default function Trip() {
       return;
     }
 
+    const currentPackage = packageItem;
+    const currentBooking = packageItem.booking;
+
     let cancelled = false;
 
     async function syncBookingStatus() {
       try {
-        const remoteBooking = await getBookingById(packageItem.booking!.id);
+        const remoteBooking = await getBookingById(currentBooking.id);
 
         if (cancelled) {
           return;
         }
 
-        /*
-         * Solo actualizamos el contexto
-         * cuando el backend realmente
-         * informa un cambio.
-         */
-        if (remoteBooking.status !== packageItem.booking!.status) {
+        if (remoteBooking.status !== currentBooking.status) {
           updateBooking({
-            itemId: packageItem.id,
-            itemType: packageItem.type,
+            itemId: currentPackage.id,
+            itemType: currentPackage.type,
 
             booking: {
-              ...packageItem.booking!,
+              ...currentBooking,
               status: remoteBooking.status,
             },
           });
         }
       } catch (error) {
-        /*
-         * Si temporalmente falla la API,
-         * conservamos el último estado local.
-         */
         console.error("No se pudo sincronizar la reserva:", error);
       }
     }

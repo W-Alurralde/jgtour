@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -8,30 +8,51 @@ import {
 } from "../schemas/flightSearch.schema";
 
 import { useFlightSearch } from "../hooks/useFlightSearch";
-import FlightResults from "./FlightResults";
+
+import type { FlightSearchState } from "../types/flightSearch.types";
 
 export default function FlightSearchForm() {
-  const [searchParams, setSearchParams] = useState<
-    FlightSearchFormData | undefined
-  >();
+  const { searchFlights } = useFlightSearch();
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<FlightSearchFormData>({
     resolver: zodResolver(flightSearchSchema),
     defaultValues: {
       origin: "SLA",
       destination: "AEP",
-      departureDate: "2026-08-05",
+      departureDate: "",
     },
   });
 
-  const { data: flights = [], isLoading } = useFlightSearch(searchParams);
-
   const onSubmit = (data: FlightSearchFormData) => {
-    setSearchParams(data);
+    const search: FlightSearchState = {
+      tripType: "oneway",
+
+      origin: data.origin.trim().toUpperCase(),
+      destination: data.destination.trim().toUpperCase(),
+
+      departureDate: data.departureDate,
+
+      passengers: {
+        adults: 1,
+        children: 0,
+        infants: 0,
+        pets: 0,
+      },
+
+      cabinClass: "economy",
+
+      assistance: {
+        needed: false,
+      },
+
+      voucher: "",
+    };
+
+    searchFlights(search);
   };
 
   return (
@@ -47,26 +68,57 @@ export default function FlightSearchForm() {
           border: "1px solid #e2e8f0",
         }}
       >
-        <input
-          placeholder="Origen (SLA)"
-          {...register("origin")}
-          style={{ padding: 12, borderRadius: 8, border: "1px solid #cbd5e1" }}
-        />
+        <div>
+          <input
+            aria-label="Aeropuerto de origen"
+            placeholder="Origen (SLA)"
+            {...register("origin")}
+            style={{
+              padding: 12,
+              borderRadius: 8,
+              border: "1px solid #cbd5e1",
+            }}
+          />
+          {errors.origin && (
+            <p role="alert">{errors.origin.message}</p>
+          )}
+        </div>
 
-        <input
-          placeholder="Destino (AEP)"
-          {...register("destination")}
-          style={{ padding: 12, borderRadius: 8, border: "1px solid #cbd5e1" }}
-        />
+        <div>
+          <input
+            aria-label="Aeropuerto de destino"
+            placeholder="Destino (AEP)"
+            {...register("destination")}
+            style={{
+              padding: 12,
+              borderRadius: 8,
+              border: "1px solid #cbd5e1",
+            }}
+          />
+          {errors.destination && (
+            <p role="alert">{errors.destination.message}</p>
+          )}
+        </div>
 
-        <input
-          type="date"
-          {...register("departureDate")}
-          style={{ padding: 12, borderRadius: 8, border: "1px solid #cbd5e1" }}
-        />
+        <div>
+          <input
+            aria-label="Fecha de salida"
+            type="date"
+            {...register("departureDate")}
+            style={{
+              padding: 12,
+              borderRadius: 8,
+              border: "1px solid #cbd5e1",
+            }}
+          />
+          {errors.departureDate && (
+            <p role="alert">{errors.departureDate.message}</p>
+          )}
+        </div>
 
         <button
           type="submit"
+          disabled={isSubmitting}
           style={{
             padding: "12px 20px",
             borderRadius: 8,
@@ -80,12 +132,6 @@ export default function FlightSearchForm() {
           Buscar vuelos
         </button>
       </form>
-
-      {isLoading ? (
-        <p>Buscando vuelos...</p>
-      ) : (
-        <FlightResults flights={flights} />
-      )}
     </section>
   );
 }
