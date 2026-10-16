@@ -44,3 +44,5 @@ firebase-debug.log
 
 # Build
 coverage
+.vercel
+.env*
