@@ -1,3 +1,5 @@
+import { auth } from "@/config/firebase";
+
 export type CancellationReasonCode =
   | "CHANGE_OF_PLANS"
   | "DATE_CHANGE"
@@ -60,8 +62,6 @@ interface CreateCancellationResponse {
   error?: string;
 }
 
-const API_URL =
-  import.meta.env.VITE_PACKAGES_API_URL;
 
 /*
  * =====================================================
@@ -77,84 +77,58 @@ const API_URL =
  *
  * cancellation.status = requested
  */
+
 export async function createCancellation(
   data: CreateCancellationInput
 ): Promise<Cancellation> {
-  if (!API_URL) {
-    throw new Error(
-      "Falta la variable VITE_PACKAGES_API_URL"
-    );
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("Debés iniciar sesión para solicitar una cancelación");
   }
 
   if (!data.bookingId.trim()) {
-    throw new Error(
-      "Falta el ID de la reserva"
-    );
+    throw new Error("Falta el ID de la reserva");
   }
 
   if (!data.itemId.trim()) {
-    throw new Error(
-      "Falta el ID del servicio"
-    );
+    throw new Error("Falta el ID del servicio");
   }
 
   if (!data.reasonCode) {
-    throw new Error(
-      "Seleccioná un motivo de cancelación"
-    );
+    throw new Error("Seleccioná un motivo de cancelación");
   }
 
-  const response = await fetch(API_URL, {
+  const token = await user.getIdToken();
+
+  const response = await fetch("/api/bookings/cancel", {
     method: "POST",
-
     headers: {
-      "Content-Type":
-        "text/plain;charset=utf-8",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
-
     body: JSON.stringify({
-      action: "createCancellation",
-
       data: {
-        bookingId:
-          data.bookingId.trim(),
-
-        itemId:
-          data.itemId.trim(),
-
-        itemType:
-          data.itemType,
-
-        reasonCode:
-          data.reasonCode,
-
-        reasonDetail:
-          data.reasonDetail?.trim() || "",
+        bookingId: data.bookingId.trim(),
+        itemId: data.itemId.trim(),
+        itemType: data.itemType,
+        reasonCode: data.reasonCode,
+        reasonDetail: data.reasonDetail?.trim() || "",
       },
     }),
   });
 
-  if (!response.ok) {
-    throw new Error(
-      `Error solicitando cancelación: ${response.status}`
-    );
-  }
+  const result: CreateCancellationResponse = await response.json();
 
-  const result: CreateCancellationResponse =
-    await response.json();
-
-  if (
-    !result.success ||
-    !result.cancellation
-  ) {
+  if (!response.ok || !result.success || !result.cancellation) {
     throw new Error(
-      result.error ||
-        "No se pudo registrar la solicitud de cancelación"
+      result.error || "No se pudo registrar la solicitud de cancelación"
     );
   }
 
   return result.cancellation;
 }
+
 
 /*
  * =====================================================
