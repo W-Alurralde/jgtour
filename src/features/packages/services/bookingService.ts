@@ -72,22 +72,6 @@ export interface Booking {
 
   createdAt?: string;
 }
-
-/*
- * Respuesta del endpoint:
- *
- * ?action=booking&id=...
- */
-interface GetBookingResponse {
-  success: boolean;
-
-  booking?: Booking;
-
-  error?: string;
-}
-
-const API_URL = import.meta.env.VITE_PACKAGES_API_URL;
-
 /*
  * =====================================================
  * CREAR RESERVA
@@ -139,9 +123,13 @@ export async function createBooking(
  * estado actual de la operación.
  */
 
-export async function getBookingById(bookingId: string): Promise<Booking> {
-  if (!API_URL) {
-    throw new Error("Falta la variable VITE_PACKAGES_API_URL");
+export async function getBookingById(
+  bookingId: string,
+): Promise<Pick<Booking, "id" | "status">> {
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("Debés iniciar sesión para consultar tu reserva");
   }
 
   const id = bookingId.trim();
@@ -150,21 +138,25 @@ export async function getBookingById(bookingId: string): Promise<Booking> {
     throw new Error("Falta el ID de la reserva");
   }
 
-  const url =
-    `${API_URL}` + `?action=booking` + `&id=${encodeURIComponent(id)}`;
+  const token = await user.getIdToken();
 
-  const response = await fetch(url, {
-    method: "GET",
+  const response = await fetch("/api/bookings/status", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ bookingId: id }),
     cache: "no-store",
   });
 
-  if (!response.ok) {
-    throw new Error(`Error consultando reserva: ${response.status}`);
-  }
+  const result: {
+    success: boolean;
+    booking?: Pick<Booking, "id" | "status">;
+    error?: string;
+  } = await response.json();
 
-  const result: GetBookingResponse = await response.json();
-
-  if (!result.success || !result.booking) {
+  if (!response.ok || !result.success || !result.booking) {
     throw new Error(result.error || "No se pudo consultar la reserva");
   }
 
