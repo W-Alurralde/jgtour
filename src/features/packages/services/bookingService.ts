@@ -1,3 +1,5 @@
+import { auth } from "@/config/firebase";
+
 export interface CreateBookingInput {
   packageId: string;
   packageName: string;
@@ -16,23 +18,21 @@ export interface CreateBookingInput {
   phone?: string;
   travelers: number;
   notes?: string;
+  requestId?: string;
 }
 
 /*
  * Estados que actualmente reconoce
  * Mi Viaje.
  */
-export type BookingStatus =
-  | "pending"
-  | "confirmed"
-  | "paid"
-  | "cancelled";
+export type BookingStatus = "pending" | "confirmed" | "paid" | "cancelled";
 
 /*
  * Respuesta al crear una reserva.
  */
 interface BookingResponse {
   success: boolean;
+  simulation?: boolean;
 
   booking?: {
     id: string;
@@ -86,8 +86,7 @@ interface GetBookingResponse {
   error?: string;
 }
 
-const API_URL =
-  import.meta.env.VITE_PACKAGES_API_URL;
+const API_URL = import.meta.env.VITE_PACKAGES_API_URL;
 
 /*
  * =====================================================
@@ -96,42 +95,33 @@ const API_URL =
  */
 
 export async function createBooking(
-  data: CreateBookingInput
+  data: CreateBookingInput,
 ): Promise<BookingResponse> {
-  if (!API_URL) {
-    throw new Error(
-      "Falta la variable VITE_PACKAGES_API_URL"
-    );
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("Debés iniciar sesión para solicitar una reserva");
   }
 
-  const response = await fetch(API_URL, {
+  const token = await user.getIdToken();
+
+  const response = await fetch("/api/bookings/create", {
     method: "POST",
-
     headers: {
-      "Content-Type":
-        "text/plain;charset=utf-8",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
-
-    body: JSON.stringify({
-      action: "createBooking",
-      data,
-    }),
+    body: JSON.stringify({ data }),
   });
 
-  if (!response.ok) {
-    throw new Error(
-      `Error creando reserva: ${response.status}`
-    );
+  const result: BookingResponse = await response.json();
+
+  if (!response.ok || !result.success) {
+    throw new Error(result.error || "No se pudo enviar la solicitud");
   }
 
-  const result: BookingResponse =
-    await response.json();
-
-  if (!result.success) {
-    throw new Error(
-      result.error ||
-        "No se pudo crear la reserva"
-    );
+  if (!result.booking?.id) {
+    throw new Error("El servidor no devolvió una referencia de reserva");
   }
 
   return result;
@@ -149,51 +139,33 @@ export async function createBooking(
  * estado actual de la operación.
  */
 
-export async function getBookingById(
-  bookingId: string
-): Promise<Booking> {
+export async function getBookingById(bookingId: string): Promise<Booking> {
   if (!API_URL) {
-    throw new Error(
-      "Falta la variable VITE_PACKAGES_API_URL"
-    );
+    throw new Error("Falta la variable VITE_PACKAGES_API_URL");
   }
 
   const id = bookingId.trim();
 
   if (!id) {
-    throw new Error(
-      "Falta el ID de la reserva"
-    );
+    throw new Error("Falta el ID de la reserva");
   }
 
   const url =
-    `${API_URL}` +
-    `?action=booking` +
-    `&id=${encodeURIComponent(id)}`;
+    `${API_URL}` + `?action=booking` + `&id=${encodeURIComponent(id)}`;
 
-  const response =
-    await fetch(url, {
-      method: "GET",
-      cache: "no-store",
-    });
+  const response = await fetch(url, {
+    method: "GET",
+    cache: "no-store",
+  });
 
   if (!response.ok) {
-    throw new Error(
-      `Error consultando reserva: ${response.status}`
-    );
+    throw new Error(`Error consultando reserva: ${response.status}`);
   }
 
-  const result: GetBookingResponse =
-    await response.json();
+  const result: GetBookingResponse = await response.json();
 
-  if (
-    !result.success ||
-    !result.booking
-  ) {
-    throw new Error(
-      result.error ||
-        "No se pudo consultar la reserva"
-    );
+  if (!result.success || !result.booking) {
+    throw new Error(result.error || "No se pudo consultar la reserva");
   }
 
   return result.booking;

@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 
 import {
   createBooking,
@@ -32,13 +32,19 @@ export default function BookingForm({
 
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [simulation, setSimulation] = useState(false);
   const [bookingId, setBookingId] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  async function handleSubmit(
-    event: FormEvent<HTMLFormElement>
-  ) {
+  const requestIdRef = useRef<string | null>(null);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (submitting || success) return;
+
+    if (!requestIdRef.current) {
+      requestIdRef.current = crypto.randomUUID();
+    }
 
     try {
       setSubmitting(true);
@@ -54,23 +60,21 @@ export default function BookingForm({
         origin: travelPackage.origin,
         destination: travelPackage.destination,
 
-        departureDate:
-          travelPackage.departureDate,
-        returnDate:
-          travelPackage.returnDate,
+        departureDate: travelPackage.departureDate,
+        returnDate: travelPackage.returnDate,
 
         fullName,
         email,
         phone,
         travelers,
         notes,
+        requestId: requestIdRef.current,
       };
 
-      const response =
-        await createBooking(booking);
+      const response = await createBooking(booking);
+      setSimulation(response.simulation === true);
 
-      const createdBookingId =
-        response.booking?.id ?? "";
+      const createdBookingId = response.booking?.id ?? "";
 
       setBookingId(createdBookingId);
       setSuccess(true);
@@ -83,7 +87,7 @@ export default function BookingForm({
        * para marcar el viaje como pendiente
        * y evitar solicitudes duplicadas.
        */
-      if (createdBookingId) {
+      if (createdBookingId && !response.simulation) {
         onBookingSuccess?.({
           bookingId: createdBookingId,
           packageId: travelPackage.id,
@@ -92,9 +96,7 @@ export default function BookingForm({
       }
     } catch (err) {
       setError(
-        err instanceof Error
-          ? err.message
-          : "No se pudo enviar la solicitud"
+        err instanceof Error ? err.message : "No se pudo enviar la solicitud",
       );
     } finally {
       setSubmitting(false);
@@ -104,27 +106,22 @@ export default function BookingForm({
   if (success) {
     return (
       <div className="booking-success">
-        <h4>Solicitud recibida</h4>
+        <h4>{simulation ? "Simulación completada" : "Solicitud recibida"}</h4>
 
         <p>
-          Recibimos tu solicitud para{" "}
-          <strong>
-            {travelPackage.name}
-          </strong>
-          .
+          Recibimos tu solicitud para <strong>{travelPackage.name}</strong>.
         </p>
 
         {bookingId && (
           <p className="booking-reference">
-            Referencia:{" "}
-            <strong>{bookingId}</strong>
+            Referencia: <strong>{bookingId}</strong>
           </p>
         )}
 
         <p>
-          El equipo de JGTravel verificará
-          disponibilidad y precio antes de
-          confirmar la reserva.
+          {simulation
+            ? "Esta es una prueba del sistema. No se registró ninguna reserva ni se bloquearon plazas."
+            : "El equipo de JGTravel verificará disponibilidad y precio antes de confirmar la reserva."}
         </p>
 
         <button
@@ -139,93 +136,66 @@ export default function BookingForm({
   }
 
   return (
-    <form
-      className="booking-form"
-      onSubmit={handleSubmit}
-    >
+    <form className="booking-form" onSubmit={handleSubmit}>
       <h4>Solicitar reserva</h4>
 
       <p className="booking-package-name">
-        {travelPackage.name} ·{" "}
-        {travelPackage.currency}{" "}
-        {travelPackage.price.toLocaleString(
-          "es-AR"
-        )}
+        {travelPackage.name} · {travelPackage.currency}{" "}
+        {travelPackage.price.toLocaleString("es-AR")}
       </p>
 
       <label>
         Nombre y apellido
-
         <input
           type="text"
           value={fullName}
-          onChange={(event) =>
-            setFullName(event.target.value)
-          }
+          onChange={(event) => setFullName(event.target.value)}
           required
         />
       </label>
 
       <label>
         Email
-
         <input
           type="email"
           value={email}
-          onChange={(event) =>
-            setEmail(event.target.value)
-          }
+          onChange={(event) => setEmail(event.target.value)}
           required
         />
       </label>
 
       <label>
         Teléfono
-
         <input
           type="tel"
           value={phone}
-          onChange={(event) =>
-            setPhone(event.target.value)
-          }
+          onChange={(event) => setPhone(event.target.value)}
         />
       </label>
 
       <label>
         Viajeros
-
         <input
           type="number"
           min="1"
           max="20"
           value={travelers}
-          onChange={(event) =>
-            setTravelers(
-              Number(event.target.value)
-            )
-          }
+          onChange={(event) => setTravelers(Number(event.target.value))}
           required
         />
       </label>
 
       <label>
         Observaciones
-
         <textarea
           value={notes}
-          onChange={(event) =>
-            setNotes(event.target.value)
-          }
+          onChange={(event) => setNotes(event.target.value)}
           rows={3}
           placeholder="Equipaje, menores, necesidades especiales..."
         />
       </label>
 
-      {error && (
-        <p className="booking-error">
-          {error}
-        </p>
-      )}
+      {error && <p className="booking-error">{error}</p>}
 
       <div className="booking-form-actions">
         <button
@@ -242,9 +212,7 @@ export default function BookingForm({
           className="package-reserve-button"
           disabled={submitting}
         >
-          {submitting
-            ? "Enviando..."
-            : "Enviar solicitud"}
+          {submitting ? "Enviando..." : "Enviar solicitud"}
         </button>
       </div>
     </form>
