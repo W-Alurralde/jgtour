@@ -162,3 +162,55 @@ export async function getBookingById(
 
   return result.booking;
 }
+
+/*
+ * =====================================================
+ * MIS RESERVAS
+ * =====================================================
+ */
+
+export type MyBooking = Pick<
+  Booking,
+  | "id"
+  | "packageId"
+  | "packageName"
+  | "price"
+  | "currency"
+  | "origin"
+  | "destination"
+  | "departureDate"
+  | "returnDate"
+  | "status"
+  | "createdAt"
+>;
+
+export async function getMyBookings(): Promise<MyBooking[]> {
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("Debés iniciar sesión para consultar tus reservas");
+  }
+
+  const token = await user.getIdToken();
+
+  const response = await fetch("/api/bookings/mine", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
+  });
+
+  const result: {
+    success: boolean;
+    bookings?: MyBooking[];
+    error?: string;
+  } = await response.json();
+
+  if (!response.ok || !result.success || !Array.isArray(result.bookings)) {
+    throw new Error(result.error || "No se pudieron recuperar tus reservas");
+  }
+
+  return result.bookings;
+}

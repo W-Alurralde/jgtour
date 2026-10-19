@@ -12,6 +12,7 @@ import {
 
 import BookingForm from "@/features/packages/components/BookingForm";
 import CancellationModal from "@/features/packages/components/CancellationModal";
+import MyBookings from "@/features/packages/components/MyBookings";
 import { getBookingById } from "@/features/packages/services/bookingService";
 import { useTrip } from "@/features/trip/hooks/useTrip";
 
@@ -122,6 +123,7 @@ export default function Trip() {
               Seguir explorando
             </Link>
           </section>
+          <MyBookings />
         </div>
       </main>
     );
@@ -337,6 +339,7 @@ export default function Trip() {
             )}
           </aside>
         </div>
+        <MyBookings />
       </div>
 
       {/* ========================= */}
