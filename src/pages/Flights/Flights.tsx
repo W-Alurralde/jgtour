@@ -6,6 +6,8 @@ import { getFlights } from "../../api/flights";
 
 import FlightCard from "../../components/cards/FlightCard";
 
+import TravelPayoutsOffers from "../../features/flights/components/TravelPayoutsOffers";
+
 import "./Flights.css";
 
 // =========================================
@@ -180,34 +182,6 @@ export default function Flights() {
     : "";
 
   // =========================================
-  // LOADING
-  // =========================================
-
-  if (loading) {
-    return (
-      <main className="flights-page">
-        <p className="flights-page__status">Buscando vuelos disponibles...</p>
-      </main>
-    );
-  }
-
-  // =========================================
-  // ERROR
-  // =========================================
-
-  if (error) {
-    return (
-      <main className="flights-page">
-        <div className="flights-page__error">
-          <strong>No pudimos cargar los vuelos.</strong>
-
-          <span>{error}</span>
-        </div>
-      </main>
-    );
-  }
-
-  // =========================================
   // RENDER
   // =========================================
 
@@ -305,9 +279,20 @@ export default function Flights() {
       {/* =====================================
           RESULTADOS
       ====================================== */}
-
+      <TravelPayoutsOffers
+        origin={origin}
+        destination={destination}
+        departureDate={departureDate}
+      />
       <section className="flights-page__results">
-        {filteredFlights.length === 0 ? (
+        {loading ? (
+          <p className="flights-page__status">Cargando catálogo JGTravel...</p>
+        ) : error ? (
+          <div className="flights-page__error">
+            <strong>No pudimos cargar el catálogo JGTravel.</strong>
+            <span>{error}</span>
+          </div>
+        ) : filteredFlights.length === 0 ? (
           <div className="flights-page__empty">
             <strong>No encontramos vuelos para esta búsqueda.</strong>
 

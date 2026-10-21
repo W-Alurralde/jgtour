@@ -26,7 +26,6 @@ export const env = {
   },
 
   travelpayouts: {
-    apiToken: import.meta.env.VITE_TRAVELPAYOUTS_API_TOKEN,
     marker: import.meta.env.VITE_TRAVELPAYOUTS_MARKER,
   },
 };
