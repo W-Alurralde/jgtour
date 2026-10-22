@@ -1,9 +1,9 @@
-
 import { useEffect, useState } from "react";
 import {
   getTravelPayoutsOffers,
   type TravelPayoutsOffer,
 } from "../services/travelPayoutsOffersService";
+import TravelPayoutsOfferCard from "./TravelPayoutsOfferCard";
 
 interface Props {
   origin: string;
@@ -36,7 +36,7 @@ export default function TravelPayoutsOffers({
         const result = await getTravelPayoutsOffers(
           origin,
           destination,
-          departureDate
+          departureDate,
         );
 
         if (!cancelled) {
@@ -47,7 +47,7 @@ export default function TravelPayoutsOffers({
           setError(
             err instanceof Error
               ? err.message
-              : "No se pudieron cargar las ofertas"
+              : "No se pudieron cargar las ofertas",
           );
         }
       } finally {
@@ -71,8 +71,8 @@ export default function TravelPayoutsOffers({
       <h2>Ofertas de vuelos · Travelpayouts</h2>
 
       <p>
-        Precios orientativos obtenidos de un proveedor externo.
-        Sujetos a cambios y confirmación.
+        Precios orientativos obtenidos de un proveedor externo. Sujetos a
+        cambios y confirmación.
       </p>
 
       {loading && <p>Consultando ofertas...</p>}
@@ -84,36 +84,19 @@ export default function TravelPayoutsOffers({
       )}
 
       {!loading && !error && offers.length > 0 && (
-        <div className="travelpayouts-offers">
+        <div
+          className="travelpayouts-offers"
+          style={{
+            display: "grid",
+            gap: "20px",
+            marginTop: "20px",
+          }}
+        >
           {offers.map((offer, index) => (
-            <article
+            <TravelPayoutsOfferCard
               key={`${offer.flight_number}-${offer.departure_at}-${index}`}
-              className="travelpayouts-offer"
-            >
-              <h3>
-                {offer.origin_airport} → {offer.destination_airport}
-              </h3>
-
-              <p>
-                Salida:{" "}
-                {new Date(offer.departure_at).toLocaleString("es-AR")}
-              </p>
-
-              <p>
-                Aerolínea: {offer.airline}
-              </p>
-
-              <p>
-                Escalas: {offer.transfers}
-              </p>
-
-              <strong>Desde USD {offer.price}</strong>
-
-              <p>
-                Precio de referencia. Verificar tarifa y disponibilidad
-                con el proveedor.
-              </p>
-            </article>
+              offer={offer}
+            />
           ))}
         </div>
       )}
