@@ -1,5 +1,7 @@
+
 import Navbar from "@/components/common/Navbar/Navbar";
 import Footer from "@/components/common/Footer/Footer";
+import WhatsAppFloatingButton from "@/components/WhatsAppFloatingButton";
 import { Outlet } from "react-router-dom";
 
 export default function MainLayout() {
@@ -12,6 +14,8 @@ export default function MainLayout() {
       </main>
 
       <Footer />
+
+      <WhatsAppFloatingButton />
     </>
   );
 }

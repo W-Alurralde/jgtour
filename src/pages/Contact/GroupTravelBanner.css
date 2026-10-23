@@ -1,0 +1,151 @@
+
+.group-banner {
+  position: relative;
+  min-height: 350px;
+  display: flex;
+  align-items: center;
+  margin: 40px 0 0;
+  padding: 40px;
+  border-radius: 22px;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 40, 88, .92),
+      rgba(0, 60, 110, .62),
+      rgba(0, 60, 110, .10)
+    ),
+    url("/image/turismo-aventura.avif") center/cover no-repeat,
+    #0057b8;
+  color: #fff;
+}
+
+.group-banner__content {
+  position: relative;
+  max-width: 560px;
+  z-index: 1;
+}
+
+.group-banner__content > span {
+  color: #80edff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.group-banner h2 {
+  font-size: clamp(30px, 4vw, 46px);
+  margin: 14px 0;
+  color: #fff;
+}
+
+.group-banner p {
+  line-height: 1.7;
+  margin-bottom: 25px;
+}
+
+.group-banner button,
+.group-modal__submit {
+  background: #ff6b4a;
+  color: #fff;
+  border: 0;
+  border-radius: 12px;
+  padding: 14px 24px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.group-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 27, 45, .72);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.group-modal {
+  width: min(100%, 520px);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  color: #2c3440;
+  border-radius: 20px;
+  padding: 28px;
+  box-sizing: border-box;
+}
+
+.group-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.group-modal__header h2 {
+  margin: 0;
+  color: #0057b8;
+}
+
+.group-modal__header button {
+  background: transparent;
+  border: 0;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.group-modal > p {
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.group-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.group-modal label {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.group-modal input,
+.group-modal select,
+.group-modal textarea {
+  width: 100%;
+  padding: 12px;
+  box-sizing: border-box;
+  border: 1px solid #d5dce5;
+  border-radius: 9px;
+  font: inherit;
+  background: #fff;
+  color: #2c3440;
+}
+
+.group-modal input:focus,
+.group-modal select:focus,
+.group-modal textarea:focus {
+  outline: 2px solid #00b8d9;
+}
+
+.group-modal__submit {
+  margin-top: 12px;
+}
+
+.group-modal small {
+  color: #64748b;
+}
+
+@media (max-width: 650px) {
+  .group-banner {
+    min-height: 320px;
+    padding: 28px 20px;
+  }
+
+  .group-modal {
+    padding: 22px;
+  }
+}
